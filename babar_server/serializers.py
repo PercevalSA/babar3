@@ -20,9 +20,11 @@ class CustomerSerializer(serializers.ModelSerializer):
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
-        fields = ('customer', 'timestamp', 'money')
+        fields = ('customer', 'money')
+        read_only_fields = ('timestamp')
 
 class PurchaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Purchase
-        fields = ('customer', 'product', 'timestamp', 'money')
+        fields = ('customer', 'product', 'money')
+        read_only_fields = ('timestamp')
