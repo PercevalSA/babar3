@@ -8,6 +8,9 @@ class Status(models.Model):
     name = models.CharField(max_length=25)
     overdraft = models.PositiveIntegerField(default=0)
 
+    def __str__(self):
+        return self.name
+
 
 class Product(models.Model):
     """
@@ -16,15 +19,19 @@ class Product(models.Model):
     name = models.CharField(max_length=25)
     price = models.DecimalField(max_digits=4, decimal_places=2)
 
+    def __str__(self):
+        return self.name
+
 
 class Customer(models.Model):
     """
     A bar customer
     Usually a regular one, sometimes has privileges
+    The nickmane is a unique identifier for the customer
     """
     firstname = models.CharField(max_length=25)
     lastname = models.CharField(max_length=25)
-    nickname = models.CharField(max_length=25)
+    nickname = models.CharField(max_length=25, unique=True)
     email = models.EmailField()
     status = models.ForeignKey(Status)
 
@@ -38,6 +45,9 @@ class Customer(models.Model):
         return money
     balance = property(_get_balance)
 
+    def __str__(self):
+        return self.nickname
+
 
 class Transaction(models.Model):
     """
@@ -50,9 +60,15 @@ class Transaction(models.Model):
     timestamp = models.DateTimeField(auto_now_add=False)
     money = models.DecimalField(max_digits=6, decimal_places=2)
 
+    def __str__(self):
+        return str(self.customer) + ': +' + str(self.money)  + '€'
+
 
 class Purchase(Transaction):
     """
     A purchase a customer has made of a product
     """
     product = models.ForeignKey(Product)
+
+    def __str__(self):
+        return str(self.customer) + ': ' + str(self.product)
