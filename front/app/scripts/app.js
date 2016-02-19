@@ -2,14 +2,14 @@
 
 /**
  * @ngdoc overview
- * @name frontApp
+ * @name BabarApp
  * @description
- * # frontApp
+ * # BabarApp
  *
  * Main module of the application.
  */
 angular
-  .module('frontApp', [
+  .module('BabarApp', [
     'ngAnimate',
     'ngAria',
     'ngCookies',

@@ -2,11 +2,15 @@
 
 /**
  * @ngdoc function
- * @name frontApp.controller:MainCtrl
+ * @name BabarApp.controller:MainCtrl
  * @description
  * # MainCtrl
- * Controller of the frontApp
+ * Controller of the BabarApp
  */
-angular.module('frontApp')
-  .controller('MainCtrl', function () {
-  });
+angular.module('BabarApp')
+.controller('MainCtrl', function ($scope, API) {
+	this.customers = [];
+	API.getCustomer().then(function(res) {
+		$scope.main.customers = res.data;
+	});
+});
