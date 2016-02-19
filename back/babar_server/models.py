@@ -45,6 +45,13 @@ class Customer(models.Model):
         return money
     balance = property(_get_balance)
 
+    def _get_fullname(self):
+        """
+        Compute a fullname
+        """
+        return self.firstname + " (" + self.nickname + ") " + self.lastname
+    fullname = property(_get_fullname)
+
     def __str__(self):
         return self.nickname
 
