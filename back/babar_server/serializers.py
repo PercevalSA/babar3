@@ -5,26 +5,26 @@ from .models import *
 class StatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Status
-        fields = ('name', 'overdraft')
+        fields = ('pk', 'name', 'overdraft')
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ('name', 'price')
+        fields = ('pk', 'name', 'price')
 
 class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
-        fields = ('firstname', 'lastname', 'nickname', 'fullname', 'email', 'status', 'balance')
+        fields = ('pk', 'firstname', 'lastname', 'nickname', 'fullname', 'email', 'status', 'balance')
 
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
-        fields = ('customer', 'money')
+        fields = ('pk', 'customer', 'money')
         read_only_fields = ('timestamp')
 
 class PurchaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Purchase
-        fields = ('customer', 'product', 'money')
+        fields = ('pk', 'customer', 'product', 'money')
         read_only_fields = ('timestamp')

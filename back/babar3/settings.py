@@ -127,7 +127,7 @@ STATIC_URL = '/static/'
 
 # CORS permissions
 CORS_ORIGIN_WHITELIST = (
-        '127.0.0.1:9000'
+        'localhost:9000'
     )
 CORS_ALLOW_HEADERS = (
         'x-requested-with',
