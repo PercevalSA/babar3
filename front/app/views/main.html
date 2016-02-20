@@ -1,1 +1,54 @@
-<p>Hello, world!</p>
+<div layout="column" layout-align="space-around" flex="50">
+
+	<div flex="33" layout="column" layout-align="center" layout-margin>
+		<md-autocomplete
+			md-items="customer in main.customers | filter:main.customerSearchText"
+			md-search-text="main.customerSearchText"
+			md-item-text="customer.fullname"
+			md-selected-item-change="main.setCustomer(customer.pk)"
+			md-autoselect="true"
+			placeholder="Customer name?">
+			<span>{{customer.fullname}}</span>
+		</md-autocomplete>
+	</div>
+
+	<div flex="33" layout="column" layout-align="center" layout-margin>
+		<md-autocomplete
+			md-items="product in main.products | filter:main.productSearchText"
+			md-search-text="main.productSearchText"
+			md-item-text="product.name"
+			md-selected-item-change="main.setProduct(product.pk)"
+			md-autoselect="true"
+			placeholder="Product name?">
+			<span>{{product.name}}</span>
+		</md-autocomplete>
+	</div>
+
+	<div flex="33" layout="column" layout-align="center center">
+		<md-button
+			ng-click="main.makePurchase()"
+			class="md-raised md-primary">
+			Make the purchase
+		</md-button>
+	</div>
+
+</div>
+
+
+<div layout="column" flex="50">
+
+	<md-content
+		ng-show="main.customer"
+		flex="50"
+		layout="column"
+		layout-align="center center">
+		<span>{{main.customer.fullname}}</span>
+		<span>{{main.customer.email}}</span>
+		<span>{{main.customer.status}}</span>
+		<span><strong>{{main.customer.balance}} €</strong></span>
+	</md-content>
+
+	<md-content flex="50" layout="column">
+	</md-content>
+
+</div>
