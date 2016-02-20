@@ -8,7 +8,7 @@
  * Controller of the BabarApp
  */
 angular.module('BabarApp')
-.controller('MainCtrl', function ($scope, $mdDialog, $mdDialogPreset, API) {
+.controller('MainCtrl', function ($scope, $mdDialog, API) {
 	API.getCustomer().then(function(res) {
 		$scope.main.customers = res.data;
 	});
@@ -29,7 +29,7 @@ angular.module('BabarApp')
 	this.setProduct = function(pk) {
 		if(pk) {
 			API.getProduct(pk).then(function(res) {
-				$scope.main.product = res.data[0];
+				$scope.main.product = res.data;
 			});
 		}
 		else {
@@ -38,5 +38,16 @@ angular.module('BabarApp')
 	};
 
 	this.makePurchase = function() {
+		var confirm = $mdDialog.confirm({
+			title: 'Make the purchase?',
+			textContent: $scope.main.customer.nickname + ': ' + $scope.main.product.name,
+			ok: 'Yes',
+			cancel: 'No',
+		});
+		$mdDialog.show(confirm).then(function() {
+			console.log('purchase ok');
+		}, function() {
+			console.log('Purchase nok');
+		});
 	};
 });

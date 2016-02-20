@@ -37,18 +37,43 @@
 
 <div layout="column" flex="50">
 
-	<md-content
-		ng-show="main.customer"
+	<div
 		flex="50"
+		layout-padding
 		layout="column"
-		layout-align="center center">
-		<span>{{main.customer.fullname}}</span>
-		<span>{{main.customer.email}}</span>
-		<span>{{main.customer.status}}</span>
-		<span><strong>{{main.customer.balance}} €</strong></span>
-	</md-content>
+		md-whiteframe="2">
+		<md-content
+			flex
+			layout-align="space-around center"
+			layout="column">
+			<img
+			src="../images/babar.jpg"
+			style="height:100px;"/>
+			<div
+				layout="column"
+				layout-align="center center"
+				ng-show="main.customer">
+				<span>{{main.customer.nickname}}</span>
+				<span>{{main.customer.firstname}} {{main.customer.lastname}}</span>
+				<span>{{main.customer.email}}</span>
+				<span>{{main.customer.status}}</span>
+				<span><strong>{{main.customer.balance}} €</strong></span>
+			</div>
+		</md-content>
+	</div>
 
-	<md-content flex="50" layout="column">
-	</md-content>
+	<div
+		flex="50"
+		layout-padding
+		layout="column"
+		md-whiteframe="2">
+		<md-content
+			flex
+			ng-show="main.product"
+			layout="column"
+			layout-align="center center">
+			<span>{{main.product.name}}</span>
+		</md-content>
+	</div>
 
 </div>
