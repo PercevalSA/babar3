@@ -26,6 +26,11 @@ angular
         controller: 'MainCtrl',
         controllerAs: 'main'
       })
+      .when('/error', {
+        templateUrl: 'views/error.html',
+        controller: 'ErrorCtrl',
+        controllerAs: 'error'
+      })
       .otherwise({
         redirectTo: '/'
       });

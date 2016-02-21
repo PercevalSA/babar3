@@ -48,10 +48,13 @@ angular.module('BabarApp')
 			cancel: 'No',
 		});
 		$mdDialog.show(confirm).then(function() {
-			console.log('purchase ok');
+			API.postPurchase(
+				$scope.main.customer.id,
+				$scope.main.product.id,
+				$scope.main.product.price
+			);
 			$scope.main.product = null;
 		}, function() {
-			console.log('Purchase nok');
 		});
 	};
 
@@ -63,7 +66,10 @@ angular.module('BabarApp')
 			cancel: 'No',
 		});
 		$mdDialog.show(confirm).then(function() {
-			console.log('payment ok');
+			API.postPayment(
+				$scope.main.customer.id,
+				$scope.main.paymentMoney
+			);
 			$scope.main.paymentIsOpen = false;
 		}, function() {
 			console.log('payment nok');

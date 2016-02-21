@@ -1,0 +1,13 @@
+<md-content
+	layout="column"
+	md-whiteframe="3"
+	layout-fill
+	layout-paddin:
+	flex
+	layout-align="center center">
+	<h1>Error {{error.status}}</h1>
+	<p>{{error.message}}</p>
+	<p ng-show="error.needToContact">
+		<a href="https://github.com/Babaritech/babar3/issues">Report an issue</a>
+	</p>
+</md-content>
