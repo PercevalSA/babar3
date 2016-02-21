@@ -9,6 +9,8 @@
  */
 angular.module('BabarApp')
 .controller('MainCtrl', function ($scope, $mdDialog, API) {
+	this.actionIsOpen = false;
+
 	API.getCustomer().then(function(res) {
 		$scope.main.customers = res.data;
 	});
