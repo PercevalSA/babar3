@@ -49,8 +49,8 @@ angular.module('BabarApp')
 		});
 		$mdDialog.show(confirm).then(function() {
 			API.postPurchase(
-				$scope.main.customer.id,
-				$scope.main.product.id,
+				$scope.main.customer.pk,
+				$scope.main.product.pk,
 				$scope.main.product.price
 			);
 			$scope.main.product = null;
@@ -67,12 +67,11 @@ angular.module('BabarApp')
 		});
 		$mdDialog.show(confirm).then(function() {
 			API.postPayment(
-				$scope.main.customer.id,
+				$scope.main.customer.pk,
 				$scope.main.paymentMoney
 			);
 			$scope.main.paymentIsOpen = false;
 		}, function() {
-			console.log('payment nok');
 		});
 	};
 

@@ -46,36 +46,36 @@ angular.module('BabarApp')
 		return call(config);
 	};
 
-	this.getCustomer = function(id) {
+	this.getCustomer = function(pk) {
 		var path = 'customer/';
-		if(id) {
-			path += id.toString();
+		if(pk) {
+			path += pk.toString();
 		}
 		return get(path);
 	};
 
-	this.getProduct = function(id) {
+	this.getProduct = function(pk) {
 		var path = 'product/';
-		if(id) {
-			path += id.toString();
+		if(pk) {
+			path += pk.toString();
 		}
 		return get(path);
 	};
 
-	this.postPayment = function(customerId, amount) {
+	this.postPayment = function(customerPK, amount) {
 		var path = 'transaction/';
 		var data = {
-			'customer': customerId,
+			'customer': customerPK,
 			'money': amount
 		};
 		return post(path, data);
 	};
 
-	this.postPurchase = function(customerId, productId, amount) {
+	this.postPurchase = function(customerPK, productPK, amount) {
 		var path = 'purchase/';
 		var data = {
-			'customer': customerId,
-			'product': productId,
+			'customer': customerPK,
+			'product': productPK,
 			'money': amount
 		};
 		return post(path, data);
