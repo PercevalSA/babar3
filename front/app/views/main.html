@@ -60,6 +60,13 @@
 				<span>{{main.customer.status}}</span>
 				<span><strong>{{main.customer.balance}} €</strong></span>
 			</div>
+			<div
+				layout="column"
+				layout-align="center center"
+				ng-hide="main.customer">
+				<span>dev by @dryvenn</span>
+				<span><a style="color:grey" href="https://github.com/Babaritech/babar3/issues">report an issue</a></span>
+			</div>
 			<!-- This md-* element is buggy, had to hack it with animations -->
 			<md-fab-speed-dial
 				ng-show="main.customer"
