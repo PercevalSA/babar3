@@ -83,11 +83,13 @@
 				</md-fab-trigger>
 				<md-fab-actions>
 					<md-button
+						ng-click="main.paymentIsOpen = true; main.actionIsOpen = false;"
 						aria-label="Make a payment"
 						class="md-fab md-raised md-mini">
 						<md-icon md-font-set="material-icons">attach_money</md-icon>
 					</md-button>
 					<md-button
+						href="admin"
 						aria-label="Settings"
 						class="md-fab md-raised md-mini">
 						<md-icon md-font-set="material-icons">create</md-icon>
@@ -102,13 +104,36 @@
 		layout-padding
 		layout="column"
 		md-whiteframe="2">
+
 		<md-content
 			flex
-			ng-show="main.product"
+			ng-show="main.product && !main.paymentIsOpen"
 			layout="column"
 			layout-align="center center">
 			<span>{{main.product.name}}</span>
 		</md-content>
+
+		<md-content
+			flex
+			layout="column"
+			ng-show="main.paymentIsOpen"
+			layout-align="space-around center">
+			<form ng-submit="main.makePayment()">
+				<md-input-container>
+					<label>Money</label>
+					<input
+					ng-model="main.paymentMoney"
+					type="number" min="0" max="1000" step="1"
+					required>
+				</md-input-container>
+			</form>
+			<md-button
+				ng-click="main.paymentIsOpen = false"
+				class="md-warn">
+				Cancel
+			</md-button>
+		</md-content>
+
 	</div>
 
 </div>
