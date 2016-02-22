@@ -25,6 +25,9 @@ angular.module('BabarApp')
 			$scope.main.customer = null;
 		}
 	};
+	this.reloadCustomer = function() {
+		this.setCustomer($scope.main.customer.pk);
+	};
 
 	API.getProduct().then(function(res) {
 		$scope.main.products = res.data;
@@ -54,6 +57,7 @@ angular.module('BabarApp')
 				$scope.main.product.price
 			);
 			$scope.main.product = null;
+			$scope.main.reloadCustomer();
 		}, function() {
 		});
 	};
@@ -71,6 +75,7 @@ angular.module('BabarApp')
 				$scope.main.paymentMoney
 			);
 			$scope.main.paymentIsOpen = false;
+			$scope.main.reloadCustomer();
 		}, function() {
 		});
 	};
