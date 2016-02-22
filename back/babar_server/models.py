@@ -67,6 +67,15 @@ class Transaction(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     money = models.DecimalField(max_digits=6, decimal_places=2)
 
+    class Meta:
+        abstract = True
+
+
+class Payment(Transaction):
+    """
+    A payment a customer has made
+    """
+
     def __str__(self):
         return str(self.customer) + ': +' + str(self.money)  + '€'
 

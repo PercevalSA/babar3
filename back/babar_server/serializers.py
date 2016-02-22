@@ -17,14 +17,14 @@ class CustomerSerializer(serializers.ModelSerializer):
         model = Customer
         fields = ('pk', 'firstname', 'lastname', 'nickname', 'fullname', 'email', 'status', 'balance')
 
-class TransactionSerializer(serializers.ModelSerializer):
+class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Transaction
+        model = Payment
         fields = ('pk', 'customer', 'money')
         read_only_fields = ('timestamp')
 
 class PurchaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Purchase
-        fields = ('pk', 'customer', 'product', 'money')
+        fields = ('customer', 'product', 'money')
         read_only_fields = ('timestamp')

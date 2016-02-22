@@ -24,7 +24,7 @@ router = DefaultRouter()
 router.register(r'status', StatusViewSet)
 router.register(r'product', ProductViewSet)
 router.register(r'customer', CustomerViewSet)
-router.register(r'transaction', TransactionViewSet)
+router.register(r'payment', PaymentViewSet)
 router.register(r'purchase', PurchaseViewSet)
 
 urlpatterns = [
