@@ -45,5 +45,5 @@ class PurchaseSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Purchase
-        fields = ('customer', 'product')
+        fields = ('pk', 'customer', 'product')
         read_only_fields = ('timestamp')
