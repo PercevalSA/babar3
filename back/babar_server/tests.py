@@ -1,3 +1,5 @@
+import random
+from decimal import Decimal,ROUND_HALF_UP
 from django.test import TestCase
 from django.core.validators import ValidationError
 from .models import *
@@ -48,6 +50,39 @@ def setup():
         customer=Customer.objects.get(nickname="penguin"),
         money="1000"
     )
+
+
+class CustomerTests(TestCase):
+
+    def test_balance_calcul(self):
+        """
+        Test balance is sum of payments minus sum of purchases
+        """
+        setup()
+        money = Decimal(200)
+        Payment.objects.create(
+            customer=Customer.objects.get(nickname="jim"),
+            money=money
+        )
+        for i in range(25):
+            if(random.choice((True, False))):
+                Purchase.objects.create(
+                    customer=Customer.objects.get(nickname="jim"),
+                    product=Product.objects.get(name="Umbrella")
+                )
+                money -= 5
+            else:
+                m = random.randrange(0, 20000) / 100
+                Payment.objects.create(
+                    customer=Customer.objects.get(nickname="jim"),
+                    money=m
+                )
+                money += Decimal(m)
+        self.assertEqual(
+            Customer.objects.get(nickname="jim").balance,
+            money.quantize(Decimal('.001'), rounding=ROUND_HALF_UP)
+        )
+
 
 class PurchaseTests(TestCase):
 

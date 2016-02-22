@@ -42,8 +42,10 @@ class Customer(models.Model):
         Figure out how much money this customer has left
         """
         money = 0
-        for t in self.transaction_set.all():
+        for t in self.payment_set.all():
             money += t.money
+        for t in self.purchase_set.all():
+            money -= t.money
         return money
     balance = property(_get_balance)
 
