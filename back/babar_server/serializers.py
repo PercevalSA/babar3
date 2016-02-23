@@ -20,6 +20,15 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = ('pk', 'name', 'price')
 
 
+class BasicProductSerializer(serializers.ModelSerializer):
+    """
+    A basic Product
+    """
+    class Meta:
+        model = Product
+        fields = ('pk', 'name')
+
+
 class CustomerSerializer(serializers.ModelSerializer):
     """
     Customer's view is read-only anyway
@@ -27,6 +36,15 @@ class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
         fields = ('pk', 'firstname', 'lastname', 'nickname', 'fullname', 'email', 'status', 'balance')
+
+
+class BasicCustomerSerializer(serializers.ModelSerializer):
+    """
+    A basic Customer
+    """
+    class Meta:
+        model = Customer
+        fields = ('pk', 'fullname')
 
 
 class PaymentSerializer(serializers.ModelSerializer):
