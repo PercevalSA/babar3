@@ -1,5 +1,5 @@
 import random
-from decimal import Decimal,ROUND_HALF_UP
+from decimal import Decimal, ROUND_HALF_UP
 from django.test import TestCase
 from django.core.validators import ValidationError
 from .models import *
