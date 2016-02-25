@@ -1,6 +1,7 @@
 from decimal import Decimal
 from django.db import models
 from django.core.validators import MinValueValidator
+from django.core.exceptions import ValidationError
 
 
 class Status(models.Model):
@@ -39,14 +40,14 @@ class Customer(models.Model):
 
     def _get_balance(self):
         """
-        Figure out how much money this customer has left
+        Figure out how much amount this customer has left
         """
-        money = 0
+        amount = 0
         for t in self.payment_set.all():
-            money += t.money
+            amount += t.amount
         for t in self.purchase_set.all():
-            money -= t.money
-        return money
+            amount -= t.amount
+        return amount
     balance = property(_get_balance)
 
     def _get_fullname(self):
@@ -67,7 +68,7 @@ class Transaction(models.Model):
     """
     customer = models.ForeignKey(Customer)
     timestamp = models.DateTimeField(auto_now_add=True)
-    money = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
+    amount = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
 
     class Meta:
         abstract = True
@@ -79,7 +80,7 @@ class Payment(Transaction):
     """
 
     def __str__(self):
-        return str(self.customer) + ': +' + str(self.money)  + '€'
+        return str(self.customer) + ': +' + str(self.amount)  + '€'
 
 
 class Purchase(Transaction):
@@ -90,10 +91,17 @@ class Purchase(Transaction):
 
     def save(self, *args, **kwargs):
         """
-        Make up the money field with *current* product price
+        Make up the amount field with *current* product price
         """
-        self.money = self.product.price
+        self.amount = self.product.price
         super(Purchase, self).save(*args, **kwargs)
 
     def __str__(self):
         return str(self.customer) + ': ' + str(self.product)
+
+    def clean(self):
+        """
+        Verify this customer has enough money
+        """
+        if self.customer.balance < self.product.price:
+            raise ValidationError("Not enough money to buy that!")

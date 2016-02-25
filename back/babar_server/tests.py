@@ -48,7 +48,7 @@ def setup():
     )
     Payment.objects.create(
         customer=Customer.objects.get(nickname="penguin"),
-        money="1000"
+        amount="1000"
     )
 
 
@@ -59,10 +59,10 @@ class CustomerTests(TestCase):
         Test balance is sum of payments minus sum of purchases
         """
         setup()
-        money = Decimal(200)
+        amount = Decimal(200)
         Payment.objects.create(
             customer=Customer.objects.get(nickname="jim"),
-            money=money
+            amount=amount
         )
         for i in range(25):
             if(random.choice((True, False))):
@@ -70,32 +70,55 @@ class CustomerTests(TestCase):
                     customer=Customer.objects.get(nickname="jim"),
                     product=Product.objects.get(name="Umbrella")
                 )
-                money -= 5
+                amount -= 5
             else:
                 m = random.randrange(0, 20000) / 100
                 Payment.objects.create(
                     customer=Customer.objects.get(nickname="jim"),
-                    money=m
+                    amount=m
                 )
-                money += Decimal(m)
+                amount += Decimal(m)
         self.assertEqual(
             Customer.objects.get(nickname="jim").balance,
-            money.quantize(Decimal('.001'), rounding=ROUND_HALF_UP)
+            amount.quantize(Decimal('.001'), rounding=ROUND_HALF_UP)
         )
 
 
 class PurchaseTests(TestCase):
 
-    def test_purchase_auto_money(self):
+    def test_purchase_auto_amount(self):
         """
-        Test the money field is automatically created
+        Test the amount field is automatically created
         """
         setup()
         p = Purchase.objects.create(
             customer=Customer.objects.get(nickname="penguin"),
             product=Product.objects.get(name="Umbrella")
         )
-        self.assertEqual(Purchase.objects.get(pk=p.pk).money, 5)
+        self.assertEqual(Purchase.objects.get(pk=p.pk).amount, 5)
+
+    def test_purchase_no_money(self):
+        """
+        Test that a purchase can't be made without enough balance
+        """
+        setup()
+        Payment.objects.create(
+            customer=Customer.objects.get(nickname="batman"),
+            amount="49"
+        )
+        self.assertTrue(
+            Customer.objects.get(nickname="batman").balance
+            <
+            Product.objects.get(name="Shotgun").price
+        )
+        p = Purchase(
+            customer=Customer.objects.get(nickname="batman"),
+            product=Product.objects.get(name="Shotgun")
+        )
+        self.assertRaises(
+            ValidationError,
+            p.full_clean
+        )
 
 
 class PaymentTests(TestCase):
@@ -107,9 +130,9 @@ class PaymentTests(TestCase):
         setup()
         p = Payment(
             customer=Customer.objects.get(nickname="penguin"),
-            money="-24"
+            amount="-24"
         )
         self.assertRaises(
-            Exception,
+            ValidationError,
             p.full_clean
         )

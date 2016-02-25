@@ -54,7 +54,7 @@ class PaymentSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Payment
-        fields = ('pk', 'customer', 'money')
+        fields = ('pk', 'customer', 'amount')
         read_only_fields = ('timestamp')
 
 
