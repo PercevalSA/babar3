@@ -35,6 +35,7 @@ class CustomerSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Customer
+        depth = 1
         fields = ('pk', 'firstname', 'lastname', 'nickname', 'fullname', 'email', 'status', 'balance')
 
 
