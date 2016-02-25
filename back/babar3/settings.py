@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
     'corsheaders',
+    'rest_auth',
     'babar_server'
 ]
 
@@ -125,15 +127,26 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# DRF config
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        # Make the entire API is read-only unless authenticated
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+    )
+}
+
 # CORS permissions
 CORS_ORIGIN_WHITELIST = (
-        'localhost:9000'
-    )
+    'localhost:9000',
+)
 CORS_ALLOW_HEADERS = (
-        'x-requested-with',
-        'content-type',
-        'accept',
-        'origin',
-        'authorization',
-        'x-csrftoken'
-    )
+    'x-requested-with',
+    'content-type',
+    'accept',
+    'origin',
+    'authorization',
+    'x-csrftoken',
+)

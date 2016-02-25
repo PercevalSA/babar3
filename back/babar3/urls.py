@@ -29,5 +29,6 @@ router.register(r'purchase', PurchaseViewSet)
 
 urlpatterns = [
         url(r'^api/', include(router.urls)),
+        url(r'^auth/', include('rest_auth.urls')),
         url(r'^admin/', admin.site.urls),
         ]
