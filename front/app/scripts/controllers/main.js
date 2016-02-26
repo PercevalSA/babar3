@@ -9,9 +9,6 @@
  */
 angular.module('BabarApp')
 .controller('MainCtrl', function ($scope, $mdDialog, $mdToast, API) {
-	this.actionIsOpen = false;
-	this.paymentIsOpen = false;
-
 	API.getCustomer().then(function(res) {
 		$scope.main.customers = res.data;
 	});
@@ -68,6 +65,7 @@ angular.module('BabarApp')
 		});
 	};
 
+	this.paymentIsOpen = false;
 	this.makePayment = function() {
 		var confirm = $mdDialog.confirm({
 			title: 'Make the payment?',

@@ -1,154 +1,145 @@
-<form ng-submit="main.makePurchase()" layout="column" layout-align="space-around" flex="50">
-
-	<div flex="33" layout="column" layout-align="center" layout-margin>
-		<md-autocomplete
-			md-items="customer in main.customers | filter:main.customerSearchText"
-			md-search-text="main.customerSearchText"
-			md-item-text="customer.fullname"
-			md-selected-item-change="main.setCustomer(customer.pk)"
-			md-autoselect="true"
-			md-autofocus
-			placeholder="Customer name?">
-			<span>{{customer.fullname}}</span>
-		</md-autocomplete>
-	</div>
-
-	<div flex="33" layout="column" layout-align="center" layout-margin>
-		<md-autocomplete
-			md-items="product in main.products | filter:main.productSearchText"
-			md-search-text="main.productSearchText"
-			md-item-text="product.name"
-			md-selected-item-change="main.setProduct(product.pk)"
-			md-autoselect="true"
-			placeholder="Product name?">
-			<span>{{product.name}}</span>
-		</md-autocomplete>
-	</div>
-
-	<div flex="33" layout="column" layout-align="center center">
-		<md-button
-			type="submit"
-			class="md-primary">
-			Make the purchase
+<md-toolbar>
+	<div class="md-toolbar-tools">
+		<h1>
+			<span>Babar</span>
+		</h1>
+		<span flex></span>
+		<md-button href="admin" class="md-icon-button" aria-label="Settings">
+			<md-icon md-font-set="material-icons">settings</md-icon>
 		</md-button>
 	</div>
+</md-toolbar>
 
-</form>
+<md-content layout="row" flex>
+	<form ng-submit="main.makePurchase()" layout="column" layout-align="space-around" flex="50">
 
-
-<div layout="column" flex="50">
-
-	<div
-		flex="50"
-		layout-padding
-		layout="column"
-		md-whiteframe="2">
-		<md-content
-			id="toast-container"
-			flex
-			layout-align="space-around center"
-			layout="column">
-			<!-- This should be replaced by the user's pic when selected -->
-			<img
-			src="../images/babar.jpg"
-			style="height:100px;"/>
-			<div
-				layout="column"
-				layout-align="center center"
-				ng-show="main.customer">
-				<span>{{main.customer.nickname}}</span>
-				<span>{{main.customer.firstname}} {{main.customer.lastname}}</span>
-				<span>{{main.customer.email}}</span>
-				<span>{{main.customer.status.name}}</span>
-				<span><strong>{{main.customer.balance}} €</strong></span>
-			</div>
-			<div
-				layout="column"
-				layout-align="center center"
-				ng-hide="main.customer">
-				<span>dev by @dryvenn</span>
-				<span><a style="color:grey" href="https://github.com/Babaritech/babar3/issues">report an issue</a></span>
-			</div>
-			<!-- This md-* element is buggy, had to hack it with animations -->
-			<md-fab-speed-dial
-				ng-show="main.customer"
-				ng-class="main.actionIsOpen ? 'md-flink' : 'md-scale'"
-				md-direction="up"
-				class="md-fab-bottom-right">
-				<md-fab-trigger>
-					<md-button
-						aria-label="Options"
-						ng-click="main.actionIsOpen = !main.actionIsOpen"
-						class="md-fab md-warn">
-						<md-icon md-font-set="material-icons">menu</md-icon>
-					</md-button>
-				</md-fab-trigger>
-				<md-fab-actions>
-					<md-button
-						ng-click="main.paymentIsOpen = true; main.actionIsOpen = false;"
-						aria-label="Make a payment"
-						class="md-fab md-raised md-mini">
-						<md-icon md-font-set="material-icons">attach_money</md-icon>
-					</md-button>
-					<md-button
-						href="admin"
-						aria-label="Settings"
-						class="md-fab md-raised md-mini">
-						<md-icon md-font-set="material-icons">create</md-icon>
-					</md-button>
-				</md-fab-actions>
-			</md-fab-speed-dial>
-		</md-content>
-	</div>
-
-	<div
-		flex="50"
-		layout-padding
-		layout="column"
-		md-whiteframe="2">
-
-		<md-content
-			flex
-			ng-show="main.product && !main.paymentIsOpen"
-			layout="column"
-			layout-align="center center">
-			<span>{{main.product.name}}</span>
-		</md-content>
-
-		<form
-			ng-show="main.paymentIsOpen"
-			flex
-			layout="column"
-			layout-align="space-around center"
-			ng-submit="main.makePayment()">
-			<md-input-container
-				flex
-				layout="row"
-				layout-align="space-around center">
-				<label>Amount</label>
-				<input
+		<div flex="33" layout="column" layout-align="center" layout-margin>
+			<md-autocomplete
+				md-items="customer in main.customers | filter:main.customerSearchText"
+				md-search-text="main.customerSearchText"
+				md-item-text="customer.fullname"
+				md-selected-item-change="main.setCustomer(customer.pk)"
+				md-autoselect="true"
 				md-autofocus
-				ng-model="main.paymentAmount"
-				type="number" min="0" max="1000" step="1"
-				required>
-			</md-input-container>
-			<div
+				placeholder="Customer name?">
+				<span>{{customer.fullname}}</span>
+			</md-autocomplete>
+		</div>
+
+		<div flex="33" layout="column" layout-align="center" layout-margin>
+			<md-autocomplete
+				md-items="product in main.products | filter:main.productSearchText"
+				md-search-text="main.productSearchText"
+				md-item-text="product.name"
+				md-selected-item-change="main.setProduct(product.pk)"
+				md-autoselect="true"
+				placeholder="Product name?">
+				<span>{{product.name}}</span>
+			</md-autocomplete>
+		</div>
+
+		<div flex="33" layout="column" layout-align="center center">
+			<md-button
+				ng-show="main.customer && main.product"
+				type="submit"
+				class="md-primary">
+				Make the purchase
+			</md-button>
+		</div>
+
+	</form>
+
+
+	<div layout="column" flex="50">
+
+		<div
+			flex="50"
+			layout-padding
+			layout="column"
+			id="toast-container"
+			md-whiteframe="2">
+			<md-content
 				flex
-				layout="row"
-				layout-align="space-around center">
-				<md-button
-					ng-click="main.paymentIsOpen = false"
-					class="md-warn">
-					Cancel
-				</md-button>
-				<md-button
-					type="submit"
-					class="md-primary">
-					Submit
-				</md-button>
-			</div>
-		</form>
+				layout-align="space-around center"
+				layout="column">
+				<!-- This should be replaced by the user's pic when selected -->
+				<img
+				src="../images/babar.jpg"
+				style="height:100px;"/>
+				<div
+					layout="column"
+					layout-align="space-arounj center"
+					ng-show="main.customer">
+					<span>{{main.customer.fullname}}</span>
+					<span>{{main.customer.status.name}}</span>
+					<md-button
+						aria-label="Open payment window"
+						ng-click="main.paymentIsOpen = true"
+						class="md-warn md-raised">
+						<span><strong>{{main.customer.balance}} €</strong></span>
+					</md-button>
+				</div>
+				<div
+					layout="column"
+					layout-align="space-around center"
+					ng-hide="main.customer">
+					<span>dev by @dryvenn</span>
+					<md-button href="https://github.com/Babaritech/babar3/issues">
+						report an issue
+						</md-button>
+				</div>
+			</md-content>
+		</div>
+
+		<div
+			flex="50"
+			layout-padding
+			layout="column"
+			md-whiteframe="2">
+
+			<md-content
+				flex
+				ng-show="main.customer && main.product && !main.paymentIsOpen"
+				layout="column"
+				layout-align="center center">
+				<span>{{main.product.name}}</span>
+			</md-content>
+
+			<form
+				ng-show="main.customer && main.paymentIsOpen"
+				flex
+				layout="column"
+				layout-align="space-around center"
+				ng-submit="main.makePayment()">
+				<md-input-container
+					flex
+					layout="row"
+					layout-align="space-around center">
+					<label>Amount</label>
+					<input
+					md-autofocus
+					ng-model="main.paymentAmount"
+					type="number" min="0" max="1000" step="1"
+					required>
+				</md-input-container>
+				<div
+					flex
+					layout="row"
+					layout-align="space-around center">
+					<md-button
+						ng-click="main.paymentIsOpen = false"
+						class="md-warn">
+						Cancel
+					</md-button>
+					<md-button
+						type="submit"
+						class="md-primary">
+						Submit
+					</md-button>
+				</div>
+			</form>
+
+		</div>
 
 	</div>
-
-</div>
+</md-content>
