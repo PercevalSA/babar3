@@ -11,6 +11,9 @@ class Status(models.Model):
     name = models.CharField(max_length=25, unique=True)
     overdraft = models.PositiveIntegerField(default=0)
 
+    class Meta:
+        verbose_name_plural = 'Statuses'
+
     def __str__(self):
         return self.name
 
@@ -58,7 +61,7 @@ class Customer(models.Model):
     fullname = property(_get_fullname)
 
     def __str__(self):
-        return self.nickname
+        return self.fullname
 
 
 class Transaction(models.Model):
