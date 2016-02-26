@@ -56,3 +56,12 @@ Run `grunt` to build.
 - [Yeoman: generator-angular](https://github.com/yeoman/generator-angular)
 - [Angular](https://docs.angularjs.org/)
 - [Angular Material Design](https://material.angularjs.org/latest/)
+
+
+## TODO
+- Make the website responsive
+- Add a filter to the API for purchases and payments
+- Handle automatic server logouts
+- Deal with case when adding objects
+- Add more tests
+- Attach transactions to an owner
