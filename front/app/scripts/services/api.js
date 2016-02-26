@@ -122,4 +122,12 @@ angular.module('BabarApp')
 		};
 		return post(path, data);
 	};
+
+	this.logout = function() {
+		var path = 'auth/logout/';
+		var data = {
+			'token': token
+		};
+		return post(path, data);
+	};
 });
