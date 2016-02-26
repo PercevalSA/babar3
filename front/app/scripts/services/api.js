@@ -1,6 +1,6 @@
 'use strict';
 
-var SERVER = 'http://127.0.0.1:8000/api/';
+var SERVER = 'http://127.0.0.1:8000/';
 
 /**
  * @ngdoc service
@@ -10,23 +10,46 @@ var SERVER = 'http://127.0.0.1:8000/api/';
  * Service in the BabarApp.
  */
 angular.module('BabarApp')
-.service('API', function ($http, $location) {
+.service('API', function ($http, $location, auth) {
+	// Store the token in memory
+	var token = '';
+	this.setToken = function(val) {
+		token = val;
+	};
+
+	var handleAuth = function(config, why) {
+		/* Ask user to authenticate
+		 * If success, start again
+		 * If not, just give it up
+		 */
+		return auth
+		.prompt(why)
+		.then(function() { return call(config); });
+	};
+	var handleError = function(status) {
+		return $location.url('error?status=' + status);
+	};
 	var call = function(config) {
+		if(!config.headers) {
+			config.headers = {};
+		}
+		if(token !== '') {
+			config.headers.Authorization = 'Token ' + token;
+		}
+
 		return $http(config)
 		.then(function(res) {
-			// 200, we're good
+			console.log(res);
+			// 200, good
 			return res;
 		}, function(res) {
-			// not good
 			console.error(res);
+			// not 200, not good
 			switch(res.status) {
-				case 401:
-					console.log('not auth');
-				//request an auth in dialog
-				break;
-				default:
-					$location.url('error?status=' + res.status.toString());
-				break;
+				case 401: return handleAuth(config, 'Unauthorized'); // invoke auth
+				case 403: return handleAuth(config, 'Forbidden'); // invoke auth
+				case 400: throw res; // propagate that to auth
+				default: return handleError(res.status);
 			}
 		});
 	};
@@ -47,23 +70,23 @@ angular.module('BabarApp')
 	};
 
 	this.getCustomer = function(pk) {
-		var path = 'customer/';
+		var path = 'api/customer/';
 		if(pk) {
-			path += pk.toString();
+			path += pk.toString() + '/';
 		}
 		return get(path);
 	};
 
 	this.getProduct = function(pk) {
-		var path = 'product/';
+		var path = 'api/product/';
 		if(pk) {
-			path += pk.toString();
+			path += pk.toString() + '/';
 		}
 		return get(path);
 	};
 
 	this.postPayment = function(customerPK, amount) {
-		var path = 'transaction/';
+		var path = 'api/payment/';
 		var data = {
 			'customer': customerPK,
 			'money': amount
@@ -72,11 +95,20 @@ angular.module('BabarApp')
 	};
 
 	this.postPurchase = function(customerPK, productPK, amount) {
-		var path = 'purchase/';
+		var path = 'api/purchase/';
 		var data = {
 			'customer': customerPK,
 			'product': productPK,
 			'money': amount
+		};
+		return post(path, data);
+	};
+
+	this.login = function(username, password) {
+		var path = 'auth/login/';
+		var data = {
+			'username': username,
+			'password': password
 		};
 		return post(path, data);
 	};

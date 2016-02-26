@@ -16,14 +16,13 @@ angular.module('BabarApp')
 		$scope.main.customers = res.data;
 	});
 	this.setCustomer = function(pk) {
-		if(pk) {
-			API.getCustomer(pk).then(function(res) {
-				$scope.main.customer = res.data;
-			});
-		}
-		else {
-			$scope.main.customer = null;
-		}
+		API.getCustomer(pk).then(function(res) {
+			$scope.main.customer = res.data;
+		});
+	};
+	this.unsetCustomer = function() {
+		this.customer = null;
+		this.customerSearchText = '';
 	};
 	this.reloadCustomer = function() {
 		this.setCustomer($scope.main.customer.pk);
@@ -33,14 +32,16 @@ angular.module('BabarApp')
 		$scope.main.products = res.data;
 	});
 	this.setProduct = function(pk) {
-		if(pk) {
-			API.getProduct(pk).then(function(res) {
-				$scope.main.product = res.data;
-			});
-		}
-		else {
-			$scope.main.product = null;
-		}
+		API.getProduct(pk).then(function(res) {
+			$scope.main.product = res.data;
+		});
+	};
+	this.unsetProduct = function() {
+		this.product = null;
+		this.productSearchText = '';
+	};
+	this.reloadProduct = function() {
+		this.setProduct($scope.main.product.pk);
 	};
 
 	this.makePurchase = function() {
@@ -55,9 +56,10 @@ angular.module('BabarApp')
 				$scope.main.customer.pk,
 				$scope.main.product.pk,
 				$scope.main.product.price
-			);
-			$scope.main.product = null;
-			$scope.main.reloadCustomer();
+			).then(function() {
+				$scope.main.product = null;
+				$scope.main.reloadCustomer();
+			});
 		}, function() {
 		});
 	};
@@ -73,9 +75,10 @@ angular.module('BabarApp')
 			API.postPayment(
 				$scope.main.customer.pk,
 				$scope.main.paymentMoney
-			);
-			$scope.main.paymentIsOpen = false;
-			$scope.main.reloadCustomer();
+			).then(function() {
+				$scope.main.paymentIsOpen = false;
+				$scope.main.reloadCustomer();
+			});
 		}, function() {
 		});
 	};

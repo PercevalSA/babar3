@@ -1,0 +1,45 @@
+<md-content layout="column">
+	<md-toolbar>
+		<div class="md-toolbar-tools">{{auth.why}}</div>
+	</md-toolbar>
+	<form
+		name="authForm"
+		layout="column"
+		ng-submit="auth.submit()"
+		layout-align="space-around center">
+		<md-input-container>
+			<label>Username</label>
+			<input
+			required
+			md-autofocus
+			type="text"
+			name="username"
+			ng-model="auth.username">
+			<div ng-messages="authForm.username.$error">
+				<div ng-message="required">This is required.</div>
+			</div>
+		</md-input-container>
+		<md-input-container>
+			<label>Password</label>
+			<input
+			required
+			type="password"
+			name="password"
+			ng-model="auth.password">
+			<div ng-messages="authForm.password.$error">
+				<div ng-message="required">This is required.</div>
+				<div ng-message="wrong">Wrong password (or username).</div>
+			</div>
+		</md-input-container>
+		<md-button
+			type="submit"
+			class="md-primary">
+			Submit
+		</md-button>
+	</form>
+	<md-button
+		ng-click="auth.cancel()"
+		class="md-warn">
+		Cancel
+	</md-button>
+</md-content>
