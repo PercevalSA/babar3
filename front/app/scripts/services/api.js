@@ -102,17 +102,16 @@ angular.module('BabarApp')
 		var path = 'api/payment/';
 		var data = {
 			'customer': customerPK,
-			'money': amount
+			'amount': amount
 		};
 		return post(path, data);
 	};
 
-	this.postPurchase = function(customerPK, productPK, amount) {
+	this.postPurchase = function(customerPK, productPK) {
 		var path = 'api/purchase/';
 		var data = {
 			'customer': customerPK,
 			'product': productPK,
-			'money': amount
 		};
 		return post(path, data);
 	};

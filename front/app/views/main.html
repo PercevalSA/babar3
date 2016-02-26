@@ -44,6 +44,7 @@
 		layout="column"
 		md-whiteframe="2">
 		<md-content
+			id="toast-container"
 			flex
 			layout-align="space-around center"
 			layout="column">
@@ -127,7 +128,7 @@
 				<label>Amount</label>
 				<input
 				md-autofocus
-				ng-model="main.paymentMoney"
+				ng-model="main.paymentAmount"
 				type="number" min="0" max="1000" step="1"
 				required>
 			</md-input-container>
