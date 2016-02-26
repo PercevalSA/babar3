@@ -17,18 +17,10 @@ angular.module('BabarApp')
 		token = val;
 	};
 
-	var handleAuth = function(config, why) {
-		/* Ask user to authenticate
-		 * If success, start again
-		 * If not, just give it up
-		 */
-		return auth
-		.prompt(why)
-		.then(function() { return call(config); });
-	};
-	var handleError = function(status) {
-		return $location.url('error?status=' + status);
-	};
+	// Store the last status for errors
+	var error = { code: '', text: ''};
+	this.getLatestError = function() { return error; };
+
 	var call = function(config) {
 		if(!config.headers) {
 			config.headers = {};
@@ -38,18 +30,39 @@ angular.module('BabarApp')
 		}
 
 		return $http(config)
+		/* Set the latest error and/or propagate */
+		.then(function(res) {
+			return res;
+		}, function(res) {
+			error.code = res.status.toString();
+			error.text = res.statusText;
+			throw res;
+		})
+		/* React to the server's response */
 		.then(function(res) {
 			console.log(res);
-			// 200, good
+			// OK
 			return res;
 		}, function(res) {
 			console.error(res);
-			// not 200, not good
+			// not OK
 			switch(res.status) {
-				case 401: return handleAuth(config, 'Unauthorized'); // invoke auth
-				case 403: return handleAuth(config, 'Forbidden'); // invoke auth
-				case 400: throw res; // propagate that to auth
-				default: return handleError(res.status);
+				/* Authentication is needed
+				 * Use the auth module to do it
+				 * In case of success, make the request again
+				 * If not, just give it up
+				 */
+				case 401:
+				case 403:
+					return auth.prompt(res.statusText).then(function() { return call(config); });
+				/* Request is bad
+				 * Let's just propagate that to the view that made the call.
+				 */
+				case 400: throw res;
+				/* This should not happen
+				 * Go to the error view
+				 */
+				default: return $location.url('error');
 			}
 		});
 	};
