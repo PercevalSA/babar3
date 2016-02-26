@@ -51,6 +51,7 @@ class BasicCustomerSerializer(serializers.ModelSerializer):
 class PaymentSerializer(serializers.ModelSerializer):
     """
     Payment is not read-only: specify the fields which are
+    Note: the amount field as a MinValueValidator to forbid negative payments
     """
     class Meta:
         model = Payment
@@ -66,3 +67,10 @@ class PurchaseSerializer(serializers.ModelSerializer):
         model = Purchase
         fields = ('pk', 'customer', 'product')
         read_only_fields = ('timestamp')
+
+    def validate(self, data):
+        """
+        Validate this purchase by verifying the customer's balance
+        """
+        if data['customer'].balance < data['product'].price:
+            raise serializers.ValidationError("Not enough money to buy that!")
