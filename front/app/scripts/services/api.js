@@ -40,11 +40,9 @@ angular.module('BabarApp')
 		})
 		/* React to the server's response */
 		.then(function(res) {
-			console.log(res);
 			// OK
 			return res;
 		}, function(res) {
-			console.error(res);
 			// not OK
 			switch(res.status) {
 				/* Authentication is needed
