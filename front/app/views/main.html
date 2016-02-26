@@ -1,4 +1,4 @@
-<div layout="column" layout-align="space-around" flex="50">
+<form ng-submit="main.makePurchase()" layout="column" layout-align="space-around" flex="50">
 
 	<div flex="33" layout="column" layout-align="center" layout-margin>
 		<md-autocomplete
@@ -27,13 +27,13 @@
 
 	<div flex="33" layout="column" layout-align="center center">
 		<md-button
-			ng-click="main.makePurchase()"
-			class="md-raised md-primary">
+			type="submit"
+			class="md-primary">
 			Make the purchase
 		</md-button>
 	</div>
 
-</div>
+</form>
 
 
 <div layout="column" flex="50">
@@ -114,31 +114,39 @@
 			<span>{{main.product.name}}</span>
 		</md-content>
 
-		<md-content
+		<form
+			ng-show="main.paymentIsOpen"
 			flex
 			layout="column"
-			ng-show="main.paymentIsOpen"
-			layout-align="space-around center">
-			<form ng-submit="main.makePayment()">
-				<md-input-container>
-					<label>Amount</label>
-					<input
-					ng-model="main.paymentMoney"
-					type="number" min="0" max="1000" step="1"
-					required>
-				</md-input-container>
+			layout-align="space-around center"
+			ng-submit="main.makePayment()">
+			<md-input-container
+				flex
+				layout="row"
+				layout-align="space-around center">
+				<label>Amount</label>
+				<input
+				md-autofocus
+				ng-model="main.paymentMoney"
+				type="number" min="0" max="1000" step="1"
+				required>
+			</md-input-container>
+			<div
+				flex
+				layout="row"
+				layout-align="space-around center">
+				<md-button
+					ng-click="main.paymentIsOpen = false"
+					class="md-warn">
+					Cancel
+				</md-button>
 				<md-button
 					type="submit"
 					class="md-primary">
 					Submit
 				</md-button>
-			</form>
-			<md-button
-				ng-click="main.paymentIsOpen = false"
-				class="md-warn">
-				Cancel
-			</md-button>
-		</md-content>
+			</div>
+		</form>
 
 	</div>
 
