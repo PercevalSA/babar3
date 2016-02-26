@@ -40,7 +40,7 @@
 
 		<div flex="33" layout="column" layout-align="center center">
 			<md-button
-				ng-show="main.customer && main.product"
+				ng-disabled="!main.customer || !main.product"
 				type="submit"
 				class="md-primary">
 				Make the purchase

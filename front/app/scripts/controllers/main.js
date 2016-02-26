@@ -53,10 +53,12 @@ angular.module('BabarApp')
 				$scope.main.customer.pk,
 				$scope.main.product.pk
 			).then(function() {
-				$scope.main.product = null;
+				// OK
+				$scope.main.unsetProduct();
 				$scope.main.reloadCustomer();
+				$mdToast.showSimple('Purchased');
 			}, function(res) {
-				// Shouldn't happen though
+				// Error, shouldn't happen though
 				$mdToast.showSimple('Error: ' + res.status.toString() + ', ' + res.statusText);
 			});
 		}, function() {
@@ -78,10 +80,12 @@ angular.module('BabarApp')
 				$scope.main.customer.pk,
 				$scope.main.paymentAmount
 			).then(function() {
+				// OK
 				$scope.main.paymentIsOpen = false;
 				$scope.main.reloadCustomer();
+				$mdToast.showSimple('Payed');
 			}, function(res) {
-				// Shouldn't happen though
+				// Error, shouldn't happen though
 				$mdToast.showSimple('Error: ' + res.status.toString() + ', ' + res.statusText);
 			});
 		}, function() {
