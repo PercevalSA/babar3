@@ -39,11 +39,28 @@ Run `grunt test`.
 
 
 ## Deployment
-Go through both installation phases.
+First, go through both installation phases.
 ### Back
+Read the [Django checklist](https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/)
+TODO: add here django checklist points (change secure key)
+TODO: setup https cors
 
 ### Front
 Run `grunt` to build.
+
+### Setup the server
+#### Setup the Python interface
+```bash
+source back/env/bin/activate
+gunicorn babar3:wsgi
+```
+
+#### Setup the WWW interface
+Make sure you have `nginx`, and use [this config](https://github.com/benoitc/gunicorn/blob/master/examples/nginx.conf).
+In the config file, enable HTTPS.
+```bash
+sudo nginx -s reload
+```
 
 
 ## Documentation
