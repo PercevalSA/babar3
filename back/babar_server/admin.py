@@ -24,8 +24,8 @@ class PaymentInline(admin.TabularInline):
 
 
 class CustomerAdmin(admin.ModelAdmin):
-    fields = ['firstname', 'lastname', 'nickname', 'email', 'status']
-    readonly_fields = ('balance',)
+    fields = ['firstname', 'lastname', 'nickname', 'email', 'status', 'balance']
+    readonly_fields= ['balance',]
     inlines = [PaymentInline, PurchaseInline]
     search_fields = ['firstname', 'lastname', 'nickname']
     list_filter = ['firstname', 'lastname', 'nickname']
