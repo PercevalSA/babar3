@@ -72,6 +72,6 @@ class PurchaseSerializer(serializers.ModelSerializer):
         """
         Validate this purchase by verifying the customer's balance
         """
-        if data['customer'].balance < data['product'].price:
+        if (data['customer'].balance + data['customer'].status.overdraft) < data['product'].price:
             raise serializers.ValidationError("Not enough money to buy that!")
         return data

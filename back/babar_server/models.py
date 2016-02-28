@@ -107,5 +107,5 @@ class Purchase(Transaction):
         Verify this customer has enough money
         Note: .full_clean() is not invoked by DRF
         """
-        if self.customer.balance < self.product.price:
+        if (self.customer.balance + self.customer.status.overdraft) < self.product.price:
             raise ValidationError("Not enough money to buy that!")
