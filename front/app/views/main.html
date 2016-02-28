@@ -71,7 +71,7 @@
 					layout-align="space-around center"
 					ng-show="main.customer">
 					<span>{{main.customer.fullname}}</span>
-					<span>{{main.customer.status.name}}</span>
+					<span>{{main.customer.status.name}} customer</span>
 					<md-button
 						aria-label="Open payment window"
 						ng-click="main.paymentIsOpen = true"
@@ -102,7 +102,7 @@
 				ng-show="main.customer && main.product && !main.paymentIsOpen"
 				layout="column"
 				layout-align="center center">
-				<span>{{main.product.name}}</span>
+				<span>{{main.product.name}} {{main.product.price}}€</span>
 			</md-content>
 
 			<form
