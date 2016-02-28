@@ -12,14 +12,19 @@ angular.module('BabarApp')
 	API.getCustomer().then(function(res) {
 		$scope.main.customers = res.data;
 	});
-	this.setCustomer = function(pk) {
-		API.getCustomer(pk).then(function(res) {
-			$scope.main.customer = res.data;
-		});
-	};
 	this.unsetCustomer = function() {
-		this.customer = null;
 		this.customerSearchText = '';
+		this.customer = undefined;
+	};
+	this.setCustomer = function(pk) {
+		if(pk) {
+			API.getCustomer(pk).then(function(res) {
+				$scope.main.customer = res.data;
+			});
+		}
+		else {
+			this.unsetCustomer();
+		}
 	};
 	this.reloadCustomer = function() {
 		this.setCustomer($scope.main.customer.pk);
@@ -28,14 +33,19 @@ angular.module('BabarApp')
 	API.getProduct().then(function(res) {
 		$scope.main.products = res.data;
 	});
-	this.setProduct = function(pk) {
-		API.getProduct(pk).then(function(res) {
-			$scope.main.product = res.data;
-		});
-	};
 	this.unsetProduct = function() {
-		this.product = null;
 		this.productSearchText = '';
+		this.product = undefined;
+	};
+	this.setProduct = function(pk) {
+		if(pk) {
+			API.getProduct(pk).then(function(res) {
+				$scope.main.product = res.data;
+			});
+		}
+		else {
+			this.unsetProduct();
+		}
 	};
 	this.reloadProduct = function() {
 		this.setProduct($scope.main.product.pk);
@@ -92,6 +102,11 @@ angular.module('BabarApp')
 			// User cancelled
 			$mdToast.showSimple('Cancelled');
 		});
+	};
+	this.debug = function() {
+		console.log($scope);
+		console.log(this.customer);
+		console.log(this.product);
 	};
 
 });
