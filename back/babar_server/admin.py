@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django import forms
 from .models import *
 
 
@@ -13,13 +14,25 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ['name']
 
 
+class TransactionFormset(forms.BaseInlineFormSet):
+    def get_queryset(self):
+        # Limit the number of inline forms to 5
+        return super().get_queryset().order_by('-timestamp')[0:5]
+
+
 class PurchaseInline(admin.TabularInline):
     model = Purchase
+    formset = TransactionFormset
+    fields = ['customer', 'product', 'amount', 'timestamp']
+    readonly_fields = ['timestamp']
     extra = 0
 
 
 class PaymentInline(admin.TabularInline):
     model = Payment
+    formset = TransactionFormset
+    fields = ['customer', 'amount', 'timestamp']
+    readonly_fields = ['timestamp']
     extra = 0
 
 
