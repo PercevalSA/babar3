@@ -28,7 +28,7 @@ class CustomerViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
     filter_backends = (filters.SearchFilter,)
-    search_fields = ('nickname', 'firstname', 'lastname')
+    search_fields = ('nickname', 'firstname', 'lastname',)
 
     def get_serializer_class(self):
         """
@@ -45,6 +45,7 @@ class PaymentViewSet(mixins.CreateModelMixin,
                      viewsets.GenericViewSet):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
+    filter_fields = ('customer',)
 
 
 class PurchaseViewSet(mixins.CreateModelMixin,
@@ -53,3 +54,4 @@ class PurchaseViewSet(mixins.CreateModelMixin,
                       viewsets.GenericViewSet):
     queryset = Purchase.objects.all()
     serializer_class = PurchaseSerializer
+    filter_fields = ('customer', 'product',)

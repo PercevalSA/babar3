@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'rest_auth',
+    'crispy_forms',
     'babar_server'
 ]
 
@@ -135,7 +136,10 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         # Make the entire API is read-only unless authenticated
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
-    )
+    ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'rest_framework.filters.DjangoFilterBackend',
+    ),
 }
 
 # CORS permissions
