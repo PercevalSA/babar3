@@ -4,16 +4,20 @@
 			<span>Babar</span>
 		</h1>
 		<span flex></span>
-		<md-button href="admin" class="md-icon-button" aria-label="Settings">
+		<md-button hide show-gt-xs href="admin" class="md-icon-button" aria-label="Settings">
 			<md-icon md-font-set="material-icons">settings</md-icon>
 		</md-button>
 	</div>
 </md-toolbar>
 
-<md-content layout="row" flex>
-	<form ng-submit="main.makePurchase()" layout="column" layout-align="space-around" flex="50">
+<md-content layout="row" layout-xs="column" flex>
+	<form
+		ng-submit="main.makePurchase()"
+		layout="column"
+		layout-align="space-around"
+		flex>
 
-		<div flex="33" layout="column" layout-align="center" layout-margin>
+		<div flex layout="column" layout-align="center" layout-margin>
 			<md-autocomplete
 				md-items="customer in main.customers | filter:main.customerSearchText"
 				md-search-text="main.customerSearchText"
@@ -26,7 +30,7 @@
 			</md-autocomplete>
 		</div>
 
-		<div flex="33" layout="column" layout-align="center" layout-margin>
+		<div flex layout="column" layout-align="center" layout-margin>
 			<md-autocomplete
 				md-items="product in main.products | filter:main.productSearchText"
 				md-search-text="main.productSearchText"
@@ -38,7 +42,7 @@
 			</md-autocomplete>
 		</div>
 
-		<div flex="33" layout="column" layout-align="center center">
+		<div flex layout="column" layout-align="center center" layout-margin>
 			<md-button
 				ng-disabled="!main.customer || !main.product"
 				type="submit"
@@ -50,10 +54,10 @@
 	</form>
 
 
-	<div layout="column" flex="50">
+	<div layout="column" flex>
 
 		<div
-			flex="50"
+			flex
 			layout-padding
 			layout="column"
 			id="toast-container"
@@ -64,6 +68,7 @@
 				layout="column">
 				<!-- This should be replaced by the user's pic when selected -->
 				<img
+				hide show-gt-xs
 				src="../images/babar.jpg"
 				style="height:100px;"/>
 				<div
@@ -86,13 +91,13 @@
 					<span>dev by @dryvenn</span>
 					<md-button href="https://github.com/Babaritech/babar3/issues">
 						report an issue
-						</md-button>
+					</md-button>
 				</div>
 			</md-content>
 		</div>
 
 		<div
-			flex="50"
+			flex
 			layout-padding
 			layout="column"
 			md-whiteframe="2">
