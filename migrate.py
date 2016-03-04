@@ -19,6 +19,45 @@ It deals arbitrary with errors the following way:
 """
 
 
+def fix_encoding(string):
+    """
+    Fix encoding of given string from the old DB
+    """
+    replacements = [
+        ("&Agrave;", "À"),
+        ("&agrave;", "à"),
+        ("&Acirc;", "Â"),
+        ("&acirc;", "â"),
+        ("&Ccedil;", "Ç"),
+        ("&ccedil;", "ç"),
+        ("&Egrave;", "È"),
+        ("&egrave;", "è"),
+        ("&Eacute;", "É"),
+        ("&eacute;", "é"),
+        ("&Ecirc;", "Ê"),
+        ("&ecirc;", "ê"),
+        ("&Euml;", "Ë"),
+        ("&euml;", "ë"),
+        ("&Icirc;", "Î"),
+        ("&icirc;", "î"),
+        ("&Iuml;", "Ï"),
+        ("&iuml;", "ï"),
+        ("&Ocirc;", "Ô"),
+        ("&ocirc;", "ô"),
+        ("&OElig;", "Œ"),
+        ("&oelig;", "œ"),
+        ("&Ugrave;", "Ù"),
+        ("&ugrave;", "ù"),
+        ("&Ucirc;", "Û"),
+        ("&ucirc;", "û"),
+        ("&Uuml;", "Ü"),
+        ("&uuml;", "ü"),
+    ]
+    for replacement in replacements:
+        string = string.replace(replacement[0], replacement[1])
+    return string
+
+
 class Model:
     db = 'babar_server.'
     pk = 1
@@ -57,7 +96,7 @@ class Product(Model):
 
     def __init__(self, name, price):
         super().__init__()
-        self.name = name[0:25]
+        self.name = fix_encoding(name[0:25])
         self.price = price
 
     def encode(self):
@@ -108,9 +147,9 @@ class Customer(Model):
 
     def __init__(self, firstname, lastname, nickname, status):
         super().__init__()
-        self.firstname = firstname[0:25]
-        self.lastname = lastname[0:25]
-        self.nickname = nickname[0:25]
+        self.firstname = fix_encoding(firstname[0:25])
+        self.lastname = fix_encoding(lastname[0:25])
+        self.nickname = fix_encoding(nickname[0:25])
         self.email = ''.join(random.choice(string.digits) for _ in range(10)) + '@example.org'
         self.status = status
 
@@ -164,7 +203,7 @@ for index, line in enumerate(lines):
                         nickname = obj['nickname']
                         for out_obj in out:
                             if type(out_obj) is Customer:
-                                if out_obj.nickname.lower() == nickname.lower():
+                                if fix_encoding(out_obj.nickname.lower()) == fix_encoding(nickname.lower()):
                                     nickname = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
                     o = Customer(obj['surname'], obj['name'], nickname, status)
                     o.id = obj['customer_id'] # remember old id
