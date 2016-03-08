@@ -1,4 +1,4 @@
-# Installation
+# Development
 ## Back
 - Make sure you have `mysql-server`, `python3`, and `virtualenv`
 - Create your MySQL database
@@ -6,7 +6,7 @@
 - Run the following commands:
 ```bash
 cd back
-virtualenv env
+virtualenv -p python3 env
 source env/bin/activate
 pip3 install -r requirements.txt
 python3 manage.py migrate
@@ -22,6 +22,7 @@ To exit virtualenv, use `deactivate`.
 ```bash
 cd front
 npm install -g grunt-cli bower yo generator-karma generator-angular
+npm install
 bower install
 grunt serve
 ```
@@ -44,28 +45,8 @@ To migrate the old babar database to the new one:
 
 
 # Deployment
-First, go through both installation phases.
-## Back
 Read the [Django checklist](https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/)
-TODO: add here django checklist points (change secure key)
-TODO: setup https cors
-
-## Front
-Run `grunt` to build.
-
-## Setup the server
-### Setup the Python interface
-```bash
-source back/env/bin/activate
-gunicorn babar3:wsgi
-```
-
-### Setup the WWW interface
-Make sure you have `nginx`, and use [this config](https://github.com/benoitc/gunicorn/blob/master/examples/nginx.conf).
-In the config file, enable HTTPS.
-```bash
-sudo nginx -s reload
-```
+See the `DEPLOY.bash` script.
 
 
 # Documentation

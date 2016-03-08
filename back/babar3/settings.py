@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_auth',
     'crispy_forms',
-    'babar_server'
+    'babar_server',
+    'mod_wsgi.server'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -84,7 +85,7 @@ WSGI_APPLICATION = 'babar3.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'USER': 'dryvenn',
+        'USER': 'root',
         'NAME': 'babar_dev'
     }
 }
@@ -127,6 +128,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = 'static'
 
 # DRF config
 REST_FRAMEWORK = {
