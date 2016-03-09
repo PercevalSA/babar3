@@ -42,8 +42,10 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_auth',
     'crispy_forms',
+    'tweepy',
+    'mod_wsgi.server',
     'babar_server',
-    'mod_wsgi.server'
+    'babar_twitter',
 ]
 
 MIDDLEWARE_CLASSES = [

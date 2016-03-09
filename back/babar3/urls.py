@@ -17,18 +17,22 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from rest_framework.routers import DefaultRouter
 from babar_server.views import *
+from babar_twitter.views import *
 
 
-router = DefaultRouter()
+server_router = DefaultRouter()
+server_router.register(r'status', StatusViewSet)
+server_router.register(r'product', ProductViewSet)
+server_router.register(r'customer', CustomerViewSet)
+server_router.register(r'payment', PaymentViewSet)
+server_router.register(r'purchase', PurchaseViewSet)
 
-router.register(r'status', StatusViewSet)
-router.register(r'product', ProductViewSet)
-router.register(r'customer', CustomerViewSet)
-router.register(r'payment', PaymentViewSet)
-router.register(r'purchase', PurchaseViewSet)
+social_router = DefaultRouter()
+social_router.register(r'tweet', TweetViewSet)
 
 urlpatterns = [
-        url(r'^api/', include(router.urls)),
-        url(r'^auth/', include('rest_auth.urls')),
-        url(r'^admin/', admin.site.urls),
-        ]
+    url(r'^api/', include(server_router.urls)),
+    url(r'^social/', include(social_router.urls)),
+    url(r'^auth/', include('rest_auth.urls')),
+    url(r'^admin/', admin.site.urls),
+]
