@@ -17,7 +17,8 @@ angular
 	'ngResource',
 	'ngRoute',
 	'ngSanitize',
-	'ngMaterial'
+	'ngMaterial',
+	'unicorn-directive'
 ])
 .config(function ($routeProvider, $mdThemingProvider) {
 	$routeProvider
