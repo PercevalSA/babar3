@@ -130,4 +130,13 @@ angular.module('BabarApp')
 		};
 		return post(path, data);
 	};
+
+	this.tweet = function(time, message) {
+		var path = 'social/tweet/';
+		var data = {
+			'time': time,
+			'message': message
+		};
+		return post(path, data);
+	};
 });

@@ -1,0 +1,53 @@
+<md-toolbar>
+	<div class="md-toolbar-tools">Tweet to spread the word</div>
+</md-toolbar>
+<form
+	layout="column"
+	layout="space-around center"
+	ng-submit="tweetdialog.submit()">
+	<md-subheader flex class="md-accent">
+		{{tweetdialog.renderPreMessage() + tweetdialog.message}}
+	</md-subheader>
+	<div
+		layout="row"
+		layout-align="space-around center"
+		flex>
+		<md-input-container flex>
+			<label>Hours</label>
+			<input
+			md-autofocus
+			ng-model="tweetdialog.hours"
+			type="number" min="0" max="{{tweetdialog.minutes === 0 ? 12 : 11 }}" step="1"
+			required>
+		</md-input-container>
+		<md-input-container flex>
+			<label>Minutes</label>
+			<input
+			md-autofocus
+			ng-model="tweetdialog.minutes"
+			type="number" min="0" max="60" step="10"
+			required>
+		</md-input-container>
+	</div>
+	<md-input-container flex>
+		<label>Additional message (optional)</label>
+		<input
+		md-maxlength="140 - tweetdialog.renderPreMessage().length"
+		ng-model="tweetdialog.message">
+	</md-input-container>
+	<div
+		flex
+		layout="row"
+		layout-align="space-around center">
+		<md-button
+			ng-click="tweetdialog.cancel()"
+			class="md-warn">
+			Cancel
+		</md-button>
+		<md-button
+			type="submit"
+			class="md-primary">
+			Submit
+		</md-button>
+	</div>
+</form>
