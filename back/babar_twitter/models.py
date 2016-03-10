@@ -5,14 +5,16 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 class Tweet(models.Model):
     """
     A tweet to tell people the bar is open.
-    time is in minutes
-    message is optionnal and will get appended to the pre-recorded message
+    - time is in minutes
+    - message is not really optional for a tweet, but it has
+    to be from the viewpoint of the API caller, and in any case
+    it won't be because of the pre_message
     """
     time = models.PositiveSmallIntegerField(validators=[
         MinValueValidator(30), # more than half an hour
         MaxValueValidator(12*60), # less than 12 hours
     ])
-    message = models.CharField(max_length=140)
+    message = models.CharField(max_length=140, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
