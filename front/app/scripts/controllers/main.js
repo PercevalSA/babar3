@@ -68,8 +68,10 @@ angular.module('BabarApp')
 				$scope.main.reloadCustomer();
 				$mdToast.showSimple('Purchased');
 			}, function(res) {
-				// Error, shouldn't happen though
-				$mdToast.showSimple('Error: ' + res.status.toString() + ', ' + res.statusText);
+				if(res !== undefined) {
+					// Error, shouldn't happen though
+					$mdToast.showSimple('Error: ' + res.status.toString() + ', ' + res.statusText);
+				}
 			});
 		}, function() {
 			// User cancelled
@@ -95,18 +97,14 @@ angular.module('BabarApp')
 				$scope.main.reloadCustomer();
 				$mdToast.showSimple('Payed');
 			}, function(res) {
-				// Error, shouldn't happen though
-				$mdToast.showSimple('Error: ' + res.status.toString() + ', ' + res.statusText);
+				if(res !== undefined) {
+					// Error, shouldn't happen though
+					$mdToast.showSimple('Error: ' + res.status.toString() + ', ' + res.statusText);
+				}
 			});
 		}, function() {
 			// User cancelled
 			$mdToast.showSimple('Cancelled');
 		});
 	};
-	this.debug = function() {
-		console.log($scope);
-		console.log(this.customer);
-		console.log(this.product);
-	};
-
 });
