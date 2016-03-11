@@ -15,7 +15,9 @@
 			type="text"
 			name="username"
 			ng-model="auth.username">
-			<div ng-messages="authForm.username.$error">
+			<div
+				ng-messages="authForm.username.$error"
+				ng-show="authForm.username.$dirty">
 				<div ng-message="required">This is required.</div>
 			</div>
 		</md-input-container>
@@ -26,7 +28,9 @@
 			type="password"
 			name="password"
 			ng-model="auth.password">
-			<div ng-messages="authForm.password.$error">
+			<div
+				ng-messages="authForm.password.$error"
+				ng-show="authForm.password.$dirty">
 				<div ng-message="required">This is required.</div>
 				<div ng-message="wrong">Wrong password (or username).</div>
 			</div>

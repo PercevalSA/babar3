@@ -32,7 +32,7 @@ angular.module('BabarApp')
 		}, function(res) {
 			// Auth unsuccessful, tell the user
 			if(res.status === 400) {
-				$scope.authForm.password.$error.wrong = true;
+				$scope.authForm.password.$setValidity('wrong', false);
 			}
 			else {
 				$location.url('error');
