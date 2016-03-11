@@ -51,6 +51,17 @@ angular.module('BabarApp')
 		this.setProduct($scope.main.product.pk);
 	};
 
+	var onError = function(res) {
+		if(res !== undefined) {
+			// Error, shouldn't happen though
+			$mdToast.showSimple('Error: ' + res.status.toString() + ', ' + res.statusText);
+		}
+	};
+	var onCancel = function() {
+		// User cancelled
+		$mdToast.showSimple('Cancelled');
+	};
+
 	this.makePurchase = function() {
 		var confirm = $mdDialog.confirm({
 			title: 'Make the purchase?',
@@ -68,14 +79,10 @@ angular.module('BabarApp')
 				$scope.main.reloadCustomer();
 				$mdToast.showSimple('Purchased');
 			}, function(res) {
-				if(res !== undefined) {
-					// Error, shouldn't happen though
-					$mdToast.showSimple('Error: ' + res.status.toString() + ', ' + res.statusText);
-				}
+				onError(res);
 			});
 		}, function() {
-			// User cancelled
-			$mdToast.showSimple('Cancelled');
+			onCancel();
 		});
 	};
 
@@ -97,14 +104,10 @@ angular.module('BabarApp')
 				$scope.main.reloadCustomer();
 				$mdToast.showSimple('Payed');
 			}, function(res) {
-				if(res !== undefined) {
-					// Error, shouldn't happen though
-					$mdToast.showSimple('Error: ' + res.status.toString() + ', ' + res.statusText);
-				}
+				onError(res);
 			});
 		}, function() {
-			// User cancelled
-			$mdToast.showSimple('Cancelled');
+			onCancel();
 		});
 	};
 });
