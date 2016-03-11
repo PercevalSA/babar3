@@ -10,7 +10,7 @@ var SERVER = 'http://127.0.0.1:8000/';
  * Service in the BabarApp.
  */
 angular.module('BabarApp')
-.service('API', function ($http, $location, auth) {
+.service('API', function ($http, $q, $location, auth) {
 	// Store the token in memory
 	var token = '';
 	this.setToken = function(val) {
@@ -32,31 +32,35 @@ angular.module('BabarApp')
 		return $http(config)
 		/* Set the latest error and/or propagate */
 		.then(function(res) {
-			return res;
+			return $q.resolve(res);
 		}, function(res) {
 			error.code = res.status.toString();
 			error.text = res.statusText;
-			throw res;
+			return $q.reject(res);
 		})
 		/* React to the server's response */
 		.then(function(res) {
 			// OK
-			return res;
+			return $q.resolve(res);
 		}, function(res) {
 			// not OK
 			switch(res.status) {
-				/* Authentication is needed
-				 * Use the auth module to do it
-				 * In case of success, make the request again
-				 * If not, just give it up
+				/* Authentication is needed,
+				 * use the auth module to do it.
+				 * If success, remake the call and
+				 * propagate the result (successful
+				 * or not).
+				 * If failure (ie cancellation),
+				 * just give up.
 				 */
 				case 401:
 				case 403:
-					return auth.prompt(res.statusText).then(function() { return call(config); });
+				return auth.prompt(res.statusText)
+				.then(function() { return call(config); });
 				/* Request is bad
 				 * Let's just propagate that to the view that made the call.
 				 */
-				case 400: throw res;
+				case 400: return $q.reject(res);
 				/* This should not happen
 				 * Go to the error view
 				 */

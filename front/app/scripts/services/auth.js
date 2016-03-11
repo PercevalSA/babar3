@@ -19,6 +19,10 @@ angular.module('BabarApp')
 		 * If it fails, demand another password or a cancellation
 		 * It it succeeds, resolve the dialog;
 		 * this will retrigger the previous request.
+		 *
+		 * Note that other dialogs are different: they close
+		 * and only then submit. And this is precisely because
+		 * of this one (can't have two dialogs at the same time).
 		 */
 		API.login(this.username, this.password)
 		.then(function(res)  {
@@ -36,7 +40,7 @@ angular.module('BabarApp')
 		});
 	};
 })
-.service('auth', function ($mdDialog, $mdToast) {
+.service('auth', function ($q, $mdDialog, $mdToast) {
 	this.prompt = function(why) {
 		return $mdDialog.show({
 			templateUrl: '../views/auth.html',
@@ -50,9 +54,11 @@ angular.module('BabarApp')
 		}).then(function() {
 			// OK
 			// Don't say nothing, OP will talk
+			return $q.resolve();
 		}, function() {
 			// Cancelled
 			$mdToast.showSimple('Cancelled');
+			return $q.reject();
 		});
 	};
 });
