@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from django.views.generic import TemplateView
 from rest_framework.routers import DefaultRouter
 from babar_server.views import *
 from babar_twitter.views import *
@@ -30,9 +31,20 @@ server_router.register(r'purchase', PurchaseViewSet)
 social_router = DefaultRouter()
 social_router.register(r'tweet', TweetViewSet)
 
+
+class StaticTemplateView(TemplateView):
+
+    def get_template_names(*args, **kwargs):
+        path = args[0].kwargs.pop('dir', '') + '/'
+        path += args[0].kwargs.pop('file', 'index.html')
+        print(path)
+        return path
+
+
 urlpatterns = [
     url(r'^api/', include(server_router.urls)),
     url(r'^social/', include(social_router.urls)),
     url(r'^auth/', include('rest_auth.urls')),
     url(r'^admin/', admin.site.urls),
+    url(r'^$', TemplateView.as_view(template_name='index.html')),
 ]

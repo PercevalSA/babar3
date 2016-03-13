@@ -1,0 +1,12 @@
+[Unit]
+Description=gunicorn daemon
+After=network.target
+
+[Service]
+User=_USER
+Type=simple
+WorkingDirectory=_TARGET_DIR/back
+ExecStart=_TARGET_DIR/back/env/bin/gunicorn babar3.wsgi
+
+[Install]
+WantedBy=multi-user.target

@@ -20,12 +20,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'pt0+cm419f2n147#%h$a7fjis(g2gjj0_#y^6$b0!r5n%x2fs0'
+SECRET_KEY = "BABAR3_SECRET_KEY"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -88,7 +86,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'USER': 'root',
-        'NAME': 'babar_dev'
+	'PASSWORD': "BABAR3_SQL_PASSWORD",
+        'NAME': 'babar3'
     }
 }
 
@@ -146,7 +145,11 @@ REST_FRAMEWORK = {
     ),
 }
 
-# CORS permissions
+# CORS permissions for local development
 CORS_ORIGIN_WHITELIST = (
     'localhost:9000',
 )
+
+# HTTPS for production
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
