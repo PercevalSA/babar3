@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'rest_auth',
     'crispy_forms',
     'tweepy',
-    'mod_wsgi.server',
     'babar_server',
     'babar_twitter',
 ]
