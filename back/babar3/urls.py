@@ -35,9 +35,15 @@ social_router.register(r'tweet', TweetViewSet)
 class StaticTemplateView(TemplateView):
 
     def get_template_names(*args, **kwargs):
-        path = args[0].kwargs.pop('dir', '') + '/'
-        path += args[0].kwargs.pop('file', 'index.html')
-        print(path)
+        path = ''
+        dir = args[0].kwargs.pop('dir', '')
+        if dir is not '/':
+            path += dir
+        file = args[0].kwargs.pop('file', '')
+        if file is not '':
+            path += file
+        else:
+            path += 'index.html'
         return path
 
 
@@ -46,5 +52,5 @@ urlpatterns = [
     url(r'^social/', include(social_router.urls)),
     url(r'^auth/', include('rest_auth.urls')),
     url(r'^admin/', admin.site.urls),
-    url(r'^$', TemplateView.as_view(template_name='index.html')),
+    url(r'^(?P<dir>(\w|/)*)(?P<file>(\w|\.)*)$', StaticTemplateView.as_view()),
 ]
