@@ -34,8 +34,13 @@ secret_key=$(openssl rand -base64 64 | tr -d "\n" | sed "s/....$//" | sed "s:/:|
 sed "s/BABAR3_SECRET_KEY/$secret_key/" -i $SETTINGS
 sed "s/^DEBUG.*/DEBUG = False/" -i $SETTINGS
 echo "ALLOWED_HOSTS = [\".$domain\"]" >> $SETTINGS
-
-
+cat <<- EOF >> $SETTINGS
+# Settings for production
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+EOF
 
 
 twitter_secret=$TARGET_DIR/back/babar_twitter/SECRETS.json
@@ -72,7 +77,7 @@ sudo cp nginx.conf $target
 sudo sed "s:_TARGET_DIR:$TARGET_DIR:g" -i $target
 sudo sed "s:_USER:$USER:g" -i $target
 sudo mkdir -p /etc/nginx/ssl
-sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/ssl/nginx.key -out /etc/nginx/ssl/nginx.crt
+[ ! -h /etc/nginx/ssl/nginx.key -a ! -f /etc/nginx/ssl/nginx.key ] && sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/ssl/nginx.key -out /etc/nginx/ssl/nginx.crt
 sudo nginx
 
 target=/etc/systemd/system/gunicorn.service

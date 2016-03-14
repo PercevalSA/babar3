@@ -43,7 +43,7 @@ angular.module('BabarApp')
 .service('auth', function ($q, $mdDialog, $mdToast) {
 	this.prompt = function(why) {
 		return $mdDialog.show({
-			templateUrl: '../views/auth.html',
+			templateUrl: 'views/auth.html',
 			openFrom: '#left',
 			closeTo: '#right',
 			clickOutsideToClose: true,
