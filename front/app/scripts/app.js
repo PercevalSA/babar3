@@ -19,7 +19,7 @@ angular
 	'ngSanitize',
 	'ngMaterial',
 	'unicorn-directive',
-	'btford.markdown'
+	'hc.marked'
 ])
 .config(function ($routeProvider, $mdThemingProvider) {
 	$routeProvider
