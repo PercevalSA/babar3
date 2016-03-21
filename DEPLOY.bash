@@ -85,7 +85,7 @@ virtualenv -p python3 env
 source env/bin/activate
 pip3 install -r requirements.txt
 python3 manage.py migrate
-python3 manage.py collectstatic
+python3 manage.py collectstatic --clear --no-input
 python3 manage.py check --deploy
 
 
