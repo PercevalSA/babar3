@@ -1,0 +1,18 @@
+<md-toolbar>
+	<div layout="row" layout="space-around center" class="md-toolbar-tools">
+		<span>{{path}}</span>
+		<md-button href="{{htmlUrl}}" class="md-icon-button" aria-label="Modify">
+			<md-icon md-font-set="material-icons">create</md-icon>
+		</md-button>
+		<span flex></span>
+		<md-button ng-click="rendererdialog.close()" class="md-icon-button" aria-label="Close">
+			<md-icon md-font-set="material-icons">close</md-icon>
+		</md-button>
+	</div>
+</md-toolbar>
+<md-content
+	layout="column"
+	layout-margin
+	layout-padding
+	btf-markdown="content">
+</md-content>

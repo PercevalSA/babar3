@@ -39,10 +39,10 @@ angular.module('BabarApp')
 		});
 	};
 })
-.controller('TweetCtrl', function($rootScope, $scope, $mdDialog, $mdToast, API) {
+.controller('TweetCtrl', function($scope, $mdDialog, $mdToast, API) {
 	this.tweet = function() {
 		$mdDialog.show({
-			templateUrl: 'views/tweet_dialog.html',
+			templateUrl: 'views/tweet-dialog.html',
 			controller: 'TweetDialogCtrl',
 			controllerAs: 'tweetdialog',
 			openFrom: 'tweet-icon',
