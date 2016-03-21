@@ -2,14 +2,14 @@
 
 set -e
 
-TARGET_DIR=/var/www/babar3
+TARGET_DIR_PREFIX=/var/www
+TARGET_DIR_SUFFIX=babar3
+TARGET_DIR=$TARGET_DIR_PREFIX/$TARGET_DIR_SUFFIX
 SETTINGS=$TARGET_DIR/back/babar3/settings.py
+
 
 sudo apt-get install -y mysql-client mysql-server libmysqlclient-dev nginx nodejs python3-pip git virtualenv npm
 [ ! -e /usr/bin/node ] && sudo ln -s /usr/bin/nodejs /usr/bin/node
-sudo mkdir -p $TARGET_DIR
-sudo rsync -a ./* $TARGET_DIR
-sudo chown -R $USER:www-data $TARGET_DIR
 
 
 set +e
@@ -19,38 +19,57 @@ sudo systemctl disable gunicorn
 set -e
 
 
-read -p "Enter website URL in the format example.org: " domain
-echo
-serverjs="var SERVER = 'https://$domain/';"
-sed "s|var SERVER.*|$serverjs|" -i $TARGET_DIR/front/app/scripts/services/API.js
+if [ ! -d $TARGET_DIR ]; then
+	# Cloning => first time => gotta ask for prod values
 
-read -s -p "Enter MySQL root password: " sqlpasswd
-echo
-mysql -u root --password=$sqlpasswd -e "create database if not exists babar3; use babar_dev;"
+	sudo mkdir -p $TARGET_DIR
+	sudo chown -R $USER:www-data $TARGET_DIR
+	cd $TARGET_DIR_PREFIX
+	git clone https://github.com/Babaritech/babar3.git $TARGET_DIR_SUFFIX
+	cd $TARGET_DIR_SUFFIX
 
+	read -p "Enter website URL in the format example.org: " domain
+	echo
+	serverjs="var SERVER = 'https://$domain/';"
+	sed "s|var SERVER.*|$serverjs|" -i $TARGET_DIR/front/app/scripts/services/API.js
 
-sed "s/BABAR3_SQL_PASSWORD/$sqlpasswd/" -i $SETTINGS
-secret_key=$(openssl rand -base64 64 | tr -d "\n" | sed "s/....$//" | sed "s:/:|:g")
-sed "s/BABAR3_SECRET_KEY/$secret_key/" -i $SETTINGS
-sed "s/^DEBUG.*/DEBUG = False/" -i $SETTINGS
-echo "ALLOWED_HOSTS = [\".$domain\"]" >> $SETTINGS
-cat <<- EOF >> $SETTINGS
-# Settings for production
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-EOF
+	read -s -p "Enter MySQL root password: " sqlpasswd
+	echo
+	mysql -u root --password=$sqlpasswd -e "create database if not exists babar3; use babar_dev;"
 
-
-twitter_secret=$TARGET_DIR/back/babar_twitter/SECRETS.json
-if [ ! -f $twitter_secret ]; then
-	cat <<- EOF | sudo tee $twitter_secret
-	{ "consumer": { "key": "consumer key", "secret": "consumer secret" }, "access": { "key": "access key", "secret": "access secret" } }
+	sed "s/BABAR3_SQL_PASSWORD/$sqlpasswd/" -i $SETTINGS
+	secret_key=$(openssl rand -base64 64 | tr -d "\n" | sed "s/....$//" | sed "s:/:|:g")
+	sed "s/BABAR3_SECRET_KEY/$secret_key/" -i $SETTINGS
+	sed "s/^DEBUG.*/DEBUG = False/" -i $SETTINGS
+	echo "ALLOWED_HOSTS = [\".$domain\"]" >> $SETTINGS
+	cat <<- EOF >> $SETTINGS
+	# Settings for production
+	SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+	SECURE_SSL_REDIRECT = True
+	SESSION_COOKIE_SECURE = True
+	CSRF_COOKIE_SECURE = True
 	EOF
-	sudo chown $USER:$USER $TARGET_DIR/back/babar_twitter/SECRETS.json
-	sudo chmod 400 $TARGET_DIR/back/babar_twitter/SECRETS.json
+
+	twitter_secret=$TARGET_DIR/back/babar_twitter/SECRETS.json
+	if [ ! -f $twitter_secret ]; then
+		cat <<- EOF | sudo tee $twitter_secret
+		{ "consumer": { "key": "consumer key", "secret": "consumer secret" }, "access": { "key": "access key", "secret": "access secret" } }
+		EOF
+		sudo chown $USER:$USER $TARGET_DIR/back/babar_twitter/SECRETS.json
+		sudo chmod 400 $TARGET_DIR/back/babar_twitter/SECRETS.json
+	fi
+
+
+else
+	# Pulling => not the first time => stash and unstash prod values
+
+	cd $TARGET_DIR
+	git stash
+	git pull --rebase
+	git stash pop
 fi
+
+
 
 
 cd $TARGET_DIR/front
