@@ -53,8 +53,17 @@ angular.module('BabarApp')
 
 	var onError = function(res) {
 		if(res !== undefined) {
-			// Error, shouldn't happen though
-			$mdToast.showSimple('Error: ' + res.status.toString() + ', ' + res.statusText);
+			var msg = 'Error: ' + res.status.toString() + ', ' + res.statusText;
+			// Fuzzy-search for a more explicit error message
+			if(res.data !== undefined) {
+				for(var key in res.data) {
+					if(key.indexOf('error') !== -1) {
+						msg = 'Error: ' + res.data[key][0];
+						break;
+					}
+				}
+			}
+			$mdToast.showSimple(msg);
 		}
 	};
 	var onCancel = function() {
