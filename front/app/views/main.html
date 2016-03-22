@@ -48,7 +48,7 @@
 				md-items="product in main.products | filter:main.productSearchText"
 				md-search-text="main.productSearchText"
 				md-item-text="product.name"
-				md-selected-item-change="main.setProduct(product.pk)"
+				md-selected-item-change="main.paymentIsOpen = false; main.setProduct(product.pk)"
 				md-autoselect="true"
 				placeholder="Product name?">
 				<span>{{product.name}}</span>
