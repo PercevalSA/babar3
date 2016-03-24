@@ -32,20 +32,20 @@
 
 		<div flex layout="column" layout-align="center" layout-margin>
 			<md-autocomplete
-				md-items="customer in main.customers | filter:main.customerSearchText"
+				md-items="customer in main.customers | fuzzy:main.customerSearchText"
 				md-search-text="main.customerSearchText"
-				md-item-text="customer.fullname"
+				md-item-text="customer.getFullname()"
 				md-selected-item-change="main.setCustomer(customer.pk)"
 				md-autoselect="true"
 				md-autofocus
 				placeholder="Customer name?">
-				<span>{{customer.fullname}}</span>
+				<span>{{customer.getFullname()}}</span>
 			</md-autocomplete>
 		</div>
 
 		<div flex layout="column" layout-align="center" layout-margin>
 			<md-autocomplete
-				md-items="product in main.products | filter:main.productSearchText"
+				md-items="product in main.products | fuzzy:main.productSearchText"
 				md-search-text="main.productSearchText"
 				md-item-text="product.name"
 				md-selected-item-change="main.paymentIsOpen = false; main.setProduct(product.pk)"
@@ -89,7 +89,7 @@
 					layout="column"
 					layout-align="space-around center"
 					ng-show="main.customer">
-					<span>{{main.customer.fullname}}</span>
+					<span>{{getCustomerFullname(main.customer)}}</span>
 					<span>{{main.customer.status.name}} customer</span>
 					<md-button
 						aria-label="Open payment window"

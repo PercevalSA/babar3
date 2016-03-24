@@ -10,7 +10,13 @@
 angular.module('BabarApp')
 .controller('MainCtrl', function ($scope, $mdDialog, $mdToast, API) {
 	API.getCustomer().then(function(res) {
-		$scope.main.customers = res.data;
+		$scope.main.customers = res.data
+		.map(function(customer) {
+			customer.getFullname = function() {
+				return this.firstname + ' (' + this.nickname + ') ' + this.lastname;
+			};
+			return customer;
+		});
 	});
 	this.unsetCustomer = function() {
 		this.customerSearchText = '';

@@ -36,7 +36,7 @@ class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
         depth = 1
-        fields = ('pk', 'firstname', 'lastname', 'nickname', 'fullname', 'email', 'status', 'balance')
+        fields = ('pk', 'firstname', 'lastname', 'nickname', 'email', 'status', 'balance')
 
 
 class BasicCustomerSerializer(serializers.ModelSerializer):
@@ -45,7 +45,7 @@ class BasicCustomerSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Customer
-        fields = ('pk', 'fullname')
+        fields = ('pk', 'firstname', 'lastname', 'nickname')
 
 
 class PaymentSerializer(serializers.ModelSerializer):

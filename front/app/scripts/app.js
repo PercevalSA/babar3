@@ -19,7 +19,8 @@ angular
 	'ngSanitize',
 	'ngMaterial',
 	'unicorn-directive',
-	'hc.marked'
+	'hc.marked',
+	'angular.filter'
 ])
 .config(function ($routeProvider, $mdThemingProvider) {
 	$routeProvider
