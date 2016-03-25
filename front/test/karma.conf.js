@@ -34,7 +34,7 @@ module.exports = function(config) {
       'bower_components/angular-unicorn-directive/unicorn.js',
       'bower_components/marked/lib/marked.js',
       'bower_components/angular-marked/dist/angular-marked.js',
-      'bower_components/angular-filter/dist/angular-filter.min.js',
+      'bower_components/angular-filter/dist/angular-filter.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       "app/scripts/**/*.js",

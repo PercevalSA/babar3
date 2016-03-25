@@ -32,7 +32,7 @@
 
 		<div flex layout="column" layout-align="center" layout-margin>
 			<md-autocomplete
-				md-items="customer in main.customers | fuzzy:main.customerSearchText"
+				md-items="customer in main.customers | fuzzy:main.customerSearchText:false:true"
 				md-search-text="main.customerSearchText"
 				md-item-text="customer.getFullname()"
 				md-selected-item-change="main.setCustomer(customer.pk)"
@@ -45,7 +45,7 @@
 
 		<div flex layout="column" layout-align="center" layout-margin>
 			<md-autocomplete
-				md-items="product in main.products | fuzzy:main.productSearchText"
+				md-items="product in main.products | fuzzy:main.productSearchText:false:true"
 				md-search-text="main.productSearchText"
 				md-item-text="product.name"
 				md-selected-item-change="main.paymentIsOpen = false; main.setProduct(product.pk)"
