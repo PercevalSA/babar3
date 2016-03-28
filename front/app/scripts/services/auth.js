@@ -8,7 +8,7 @@
  * Service in the BabarApp.
  */
 angular.module('BabarApp')
-.controller('AuthCtrl', function ($location, $scope, $mdDialog, API, why) {
+.controller('AuthCtrl', function ($location, $scope, $mdDialog, API, Credentials, why) {
 	this.why = why;
 
 	this.cancel = function() {
@@ -24,20 +24,28 @@ angular.module('BabarApp')
 		 * and only then submit. And this is precisely because
 		 * of this one (can't have two dialogs at the same time).
 		 */
-		API.login(this.username, this.password)
-		.then(function(res)  {
-			// Auth successful, store the token and exit
-			API.setToken(res.data.key);
+		if(Credentials.getType() === 'Token') {
+			API.login(this.username, this.password)
+			.then(function(res)  {
+				// Auth successful, store the token and exit
+				Credentials.set(res.data.token);
+				$mdDialog.hide();
+			}, function(res) {
+				// Auth unsuccessful, tell the user
+				if(res.status === 400) {
+					$scope.authForm.password.$setValidity('wrong', false);
+				}
+				else {
+					$location.url('error');
+				}
+			});
+		}
+		else if(Credentials.getType() === 'Basic') {
+			// Basic doesn't need a login
+			var creds = Credentials.encodeForBasic(this.username, this.password);
+			Credentials.set(creds);
 			$mdDialog.hide();
-		}, function(res) {
-			// Auth unsuccessful, tell the user
-			if(res.status === 400) {
-				$scope.authForm.password.$setValidity('wrong', false);
-			}
-			else {
-				$location.url('error');
-			}
-		});
+		}
 	};
 })
 .service('auth', function ($q, $mdDialog, $mdToast) {

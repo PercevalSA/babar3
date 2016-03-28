@@ -33,6 +33,10 @@ if [ ! -d $TARGET_DIR ]; then
 	serverjs="var SERVER = 'https://$domain/';"
 	sed "s|var SERVER.*|$serverjs|" -i $TARGET_DIR/front/app/scripts/services/API.js
 
+	read -s -p "Enter website password: " nginxpasswd
+	echo
+	sudo htpasswd -b -c /etc/nginx/.htpasswd babar3 $nginxpasswd
+
 	read -s -p "Enter MySQL root password: " sqlpasswd
 	echo
 	mysql -u root --password=$sqlpasswd -e "create database if not exists babar3; use babar_dev;"
@@ -81,7 +85,7 @@ grunt build
 
 
 cd $TARGET_DIR/back
-virtualenv -p python3 env
+virtualenv -p python3 --no-site-packages env
 source env/bin/activate
 pip3 install -r requirements.txt
 python3 manage.py migrate

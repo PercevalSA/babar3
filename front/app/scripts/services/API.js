@@ -1,6 +1,40 @@
 'use strict';
 
-var SERVER = 'http://127.0.0.1:8000/';
+var SERVER = 'http://localhost:8000/';
+var AUTH_HEADER = 'Authorization';
+
+
+/**
+ * @ngdoc service
+ * @name BabarApp.Credentials
+ * @description
+ * # Credentials
+ * Service in the BabarApp.
+ */
+angular.module('BabarApp')
+.service('Credentials', function () {
+	/*
+	 * Either 'Basic' or 'Token'.
+	 * Never use basic auth without https!
+	 */
+	var TYPE = 'Token';
+	this.getType = function() {return TYPE;};
+
+	var credentials = '';
+	this.get = function() {
+		var c = credentials;
+		if(TYPE === 'Basic') {
+			credentials = '';
+		}
+		return c;
+	};
+	this.set = function(val) {
+		credentials = TYPE + ' ' + val;
+	};
+	this.encodeForBasic = function(username, password) {
+		return btoa(username + ':' + password);
+	};
+});
 
 /**
  * @ngdoc service
@@ -10,24 +44,15 @@ var SERVER = 'http://127.0.0.1:8000/';
  * Service in the BabarApp.
  */
 angular.module('BabarApp')
-.service('API', function ($http, $q, $location, auth) {
-	// Store the token in memory
-	var token = '';
-	this.setToken = function(val) {
-		token = val;
-	};
-
+.service('API', function ($http, $q, $location, Credentials, auth) {
 	// Store the last status for errors
 	var error = { code: '', text: ''};
 	this.getLatestError = function() { return error; };
 
 	var call = function(config) {
-		if(!config.headers) {
-			config.headers = {};
-		}
-		if(token !== '') {
-			config.headers.Authorization = 'Token ' + token;
-		}
+		config.headers = config.headers || {};
+		// Are there already some credentials?
+		config.headers[AUTH_HEADER] = config.headers[AUTH_HEADER] || Credentials.get();
 
 		return $http(config)
 		/* Set the latest error and/or propagate */
@@ -64,7 +89,7 @@ angular.module('BabarApp')
 				/* This should not happen
 				 * Go to the error view
 				 */
-				default: return $location.url('error');
+				default: $location.url('error');
 			}
 		});
 	};
@@ -79,7 +104,7 @@ angular.module('BabarApp')
 		var config = {
 			'url': SERVER + path,
 			'method': 'POST',
-			'data': data
+			'data': data || {}
 		};
 		return call(config);
 	};
@@ -122,20 +147,27 @@ angular.module('BabarApp')
 	};
 
 	this.login = function(username, password) {
-		var path = 'auth/login/';
-		var data = {
-			'username': username,
-			'password': password
+		/* Login is special: whatever the current
+		 * Credential type, it always uses Basic.
+		 */
+		var config = {
+			'url': SERVER + 'api/auth/login/',
+			'method': 'POST',
+			'headers': {},
+			'data': {}
 		};
-		return post(path, data);
+		config.headers[AUTH_HEADER] = 'Basic ' + Credentials.encodeForBasic(username, password);
+		return call(config);
 	};
 
 	this.logout = function() {
-		var path = 'auth/logout/';
-		var data = {
-			'token': token
-		};
-		return post(path, data);
+		var path = 'api/auth/logout/';
+		return post(path);
+	};
+
+	this.logoutAll = function() {
+		var path = 'api/auth/logoutall/';
+		return post(path);
 	};
 
 	this.tweet = function(time, message) {

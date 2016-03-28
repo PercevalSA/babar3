@@ -48,9 +48,9 @@ class StaticTemplateView(TemplateView):
 
 
 urlpatterns = [
+    url(r'^api/auth/', include('knox.urls')),
     url(r'^api/', include(server_router.urls)),
     url(r'^social/', include(social_router.urls)),
-    url(r'^auth/', include('rest_auth.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^(?P<dir>(\w|/)*)(?P<file>(\w|\.)*)$', StaticTemplateView.as_view()),
 ]

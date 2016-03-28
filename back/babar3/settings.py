@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
+import datetime
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,9 +26,7 @@ SECRET_KEY = "BABAR3_SECRET_KEY"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -36,9 +35,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'rest_framework.authtoken',
+    'knox',
     'corsheaders',
-    'rest_auth',
     'crispy_forms',
     'tweepy',
     'babar_server',
@@ -132,17 +130,26 @@ STATIC_ROOT = 'static'
 
 # DRF config
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-    ),
     'DEFAULT_PERMISSION_CLASSES': (
-        # Make the entire API is read-only unless authenticated
+        # The entire API is read-only for anonymous users by default.
+        # But we'll configure nginx so that basic authentication is required.
+        # Note that some views are read-only anyway.
+        'rest_framework.permissions.IsAuthenticated',
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        # Token for usual operations
+        'knox.auth.TokenAuthentication',
+        # Basic for login
+        'rest_framework.authentication.BasicAuthentication',
     ),
     'DEFAULT_FILTER_BACKENDS': (
         'rest_framework.filters.DjangoFilterBackend',
     ),
 }
+
+# Django's native sessions
+SESSION_COOKIE_AGE = 300 # 5 minutes
 
 # CORS permissions for local development
 CORS_ORIGIN_WHITELIST = (
