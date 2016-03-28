@@ -89,6 +89,9 @@ angular.module('BabarApp')
 		if(pk) {
 			path += pk.toString() + '/';
 		}
+		else {
+			path += '?info=basic';
+		}
 		return get(path);
 	};
 

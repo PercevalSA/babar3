@@ -15,14 +15,6 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
 
-    def get_serializer_class(self):
-        """
-        Don't return all info when listing
-        """
-        if self.suffix == 'List':
-            return BasicProductSerializer
-        return self.serializer_class
-
 
 class CustomerViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Customer.objects.all()
@@ -32,9 +24,14 @@ class CustomerViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_serializer_class(self):
         """
-        Don't return all info when listing
+        This is a speed improvement for the API.
+        Instead of fetching all customers with all their info,
+        just return their name and pk when the "?info=basic" is
+        specified in the URL. The full info on one customer can
+        then be retrieved with its detailed view.
         """
-        if self.suffix == 'List':
+        info = self.request.query_params.get("info", "full")
+        if info == "basic":
             return BasicCustomerSerializer
         return self.serializer_class
 

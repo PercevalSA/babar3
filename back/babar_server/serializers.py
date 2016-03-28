@@ -20,15 +20,6 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = ('pk', 'name', 'price')
 
 
-class BasicProductSerializer(serializers.ModelSerializer):
-    """
-    A basic Product
-    """
-    class Meta:
-        model = Product
-        fields = ('pk', 'name')
-
-
 class CustomerSerializer(serializers.ModelSerializer):
     """
     Customer's view is read-only anyway
