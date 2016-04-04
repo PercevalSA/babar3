@@ -154,3 +154,11 @@ SESSION_COOKIE_AGE = 300 # 5 minutes
 CORS_ORIGIN_WHITELIST = (
     'localhost:9000',
 )
+
+# Knox auth
+REST_KNOX = {
+    'DEFAULT_TOKEN_TTL': datetime.timedelta(hours=1),
+    'MAX_TOKEN_TTL': datetime.timedelta(hours=1),
+    'DEFAULT_TOKEN_USE': 1,
+    'MAX_TOKEN_USE': 1
+}

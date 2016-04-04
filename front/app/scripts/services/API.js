@@ -1,38 +1,22 @@
 'use strict';
 
 var SERVER = 'http://localhost:8000/';
-var AUTH_HEADER = 'Authorization';
-
 
 /**
  * @ngdoc service
- * @name BabarApp.Credentials
+ * @name BabarApp.Token
  * @description
- * # Credentials
+ * # Token
  * Service in the BabarApp.
  */
 angular.module('BabarApp')
-.service('Credentials', function () {
-	/*
-	 * Either 'Basic' or 'Token'.
-	 * Never use basic auth without https!
-	 */
-	var TYPE = 'Token';
-	this.getType = function() {return TYPE;};
-
-	var credentials = '';
+.service('Token', function () {
+	var token = '';
 	this.get = function() {
-		var c = credentials;
-		if(TYPE === 'Basic') {
-			credentials = '';
-		}
-		return c;
+		return token;
 	};
 	this.set = function(val) {
-		credentials = TYPE + ' ' + val;
-	};
-	this.encodeForBasic = function(username, password) {
-		return btoa(username + ':' + password);
+		token = 'Token ' + val;
 	};
 });
 
@@ -44,16 +28,20 @@ angular.module('BabarApp')
  * Service in the BabarApp.
  */
 angular.module('BabarApp')
-.service('API', function ($http, $q, $location, Credentials, auth) {
+.service('API', function ($http, $q, $location, Token, auth) {
 	// Store the last status for errors
 	var error = { code: '', text: ''};
 	this.getLatestError = function() { return error; };
 
 	var call = function(config) {
-		config.headers = config.headers || {};
-		// Are there already some credentials?
-		config.headers[AUTH_HEADER] = config.headers[AUTH_HEADER] || Credentials.get();
-
+		/* POST methods might need authentication. */
+		if(config.method === 'POST') {
+			if(!config.headers || config.headers.Authorization === '') {
+				config.headers = {
+					'Authorization': Token.get()
+				};
+			}
+		}
 		return $http(config)
 		/* Set the latest error and/or propagate */
 		.then(function(res) {
@@ -81,7 +69,9 @@ angular.module('BabarApp')
 				case 401:
 				case 403:
 				return auth.prompt(res.statusText)
-				.then(function() { return call(config); });
+				.then(function() {
+					return call(config);
+				});
 				/* Request is bad
 				 * Let's just propagate that to the view that made the call.
 				 */
@@ -153,11 +143,18 @@ angular.module('BabarApp')
 		var config = {
 			'url': SERVER + 'api/auth/login/',
 			'method': 'POST',
-			'headers': {},
+			'headers': {
+				'Authorization':'Basic ' + btoa(username + ':' + password)
+			},
 			'data': {}
 		};
-		config.headers[AUTH_HEADER] = 'Basic ' + Credentials.encodeForBasic(username, password);
-		return call(config);
+		return call(config)
+		.then(function(res) {
+			Token.set(res.data.token);
+			return $q.resolve(res);
+		}, function(res) {
+			return $q.reject(res);
+		});
 	};
 
 	this.logout = function() {
