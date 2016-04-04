@@ -1,7 +1,7 @@
 # Installation and Deployment
 Take a look at `DEPLOY.bash`.
 On Debian-like system, try:
-> curl https://raw.githubusercontent.com/Babaritech/babar3/master/DEPLOY.bash | bash
+> bash -c "$(curl https://raw.githubusercontent.com/Babaritech/babar3/master/DEPLOY.bash)"
 
 Don't forget to read the [Django checklist](https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/).
 You cant get SSL certificates with [letsencrypt](https://github.com/letsencrypt/letsencrypt).
