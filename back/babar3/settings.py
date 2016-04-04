@@ -134,7 +134,6 @@ REST_FRAMEWORK = {
         # The entire API is read-only for anonymous users by default.
         # But we'll configure nginx so that basic authentication is required.
         # Note that some views are read-only anyway.
-        'rest_framework.permissions.IsAuthenticated',
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
