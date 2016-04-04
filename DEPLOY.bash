@@ -32,10 +32,7 @@ if [ ! -d $TARGET_DIR ]; then
 	echo
 	serverjs="var SERVER = 'https://$domain/';"
 	sed "s|var SERVER.*|$serverjs|" -i $TARGET_DIR/front/app/scripts/services/API.js
-
-	read -s -p "Enter website password: " nginxpasswd
-	echo
-	sudo htpasswd -b -c /etc/nginx/.htpasswd babar3 $nginxpasswd
+	sed "s|_DOMAIN|$domain|g" -i $TARGET_DIR/conf/nginx.conf
 
 	read -s -p "Enter MySQL root password: " sqlpasswd
 	echo
@@ -98,7 +95,6 @@ cd $TARGET_DIR/conf
 target=/etc/nginx/nginx.conf
 sudo cp nginx.conf $target
 sudo sed "s:_TARGET_DIR:$TARGET_DIR:g" -i $target
-sudo sed "s:_USER:$USER:g" -i $target
 sudo mkdir -p /etc/nginx/ssl
 [ ! -h /etc/nginx/ssl/nginx.key -a ! -f /etc/nginx/ssl/nginx.key ] && sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/ssl/nginx.key -out /etc/nginx/ssl/nginx.crt
 sudo nginx
