@@ -30,7 +30,8 @@ angular.module('BabarApp')
 			$mdDialog.hide();
 		}, function(res) {
 			// Auth unsuccessful, tell the user
-			if(res.status === 400) {
+			var wrongStatuses = [400, 401, 403];
+			if(wrongStatuses.indexOf(res.status) >= 0) {
 				$scope.authForm.password.$setValidity('wrong', false);
 			}
 			else {

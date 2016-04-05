@@ -34,13 +34,11 @@ angular.module('BabarApp')
 	this.getLatestError = function() { return error; };
 
 	var call = function(config) {
-		/* POST methods might need authentication. */
-		if(config.method === 'POST') {
-			if(!config.headers || config.headers.Authorization === '') {
-				config.headers = {
-					'Authorization': Token.get()
-				};
-			}
+		/* Non-login POST methods need authentication */
+		if(config.method === 'POST' && config.url.indexOf('login') < 0) {
+			config.headers = {
+				'Authorization': Token.get()
+			};
 		}
 		return $http(config)
 		/* Set the latest error and/or propagate */
@@ -58,7 +56,11 @@ angular.module('BabarApp')
 		}, function(res) {
 			// not OK
 			switch(res.status) {
-				/* Authentication is needed,
+				/* If was a login, it means it
+				 * failed, so transmit that.
+				 *
+				 * If it was something else,
+				 * authentication is needed,
 				 * use the auth module to do it.
 				 * If success, remake the call and
 				 * propagate the result (successful
@@ -68,10 +70,16 @@ angular.module('BabarApp')
 				 */
 				case 401:
 				case 403:
-				return auth.prompt(res.statusText)
-				.then(function() {
-					return call(config);
-				});
+				if(config.url.indexOf('login') >= 0) {
+					return $q.reject(res);
+				}
+				else {
+					return auth.prompt(res.statusText)
+					.then(function() {
+						return call(config);
+					});
+				}
+				break;
 				/* Request is bad
 				 * Let's just propagate that to the view that made the call.
 				 */
@@ -79,7 +87,7 @@ angular.module('BabarApp')
 				/* This should not happen
 				 * Go to the error view
 				 */
-				default: $location.url('error');
+				default: $location.url('error'); return $q.reject(res);
 			}
 		});
 	};
