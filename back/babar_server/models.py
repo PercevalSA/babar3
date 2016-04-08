@@ -1,5 +1,6 @@
 from decimal import Decimal
 from django.db import models
+from django.utils import timezone
 from django.core.validators import MinValueValidator
 from django.core.exceptions import ValidationError
 
@@ -29,16 +30,28 @@ class Product(models.Model):
         return self.name
 
 
+def year_validator(year):
+    """
+    year must be superior to 2000
+    and be in longer than 3 years.
+    """
+    lower = 2000
+    upper = timezone.now().year + 3
+    if year < lower or year > upper:
+        raise ValidationError(str(lower) + " <= year <= " + str(upper) + " is False")
+
+
 class Customer(models.Model):
     """
     A bar customer
-    Usually a regular one, sometimes has privileges
     The nickmane is a unique identifier for the customer
+    The year is the year of graduation (namely one's class)
     """
     firstname = models.CharField(max_length=25)
     lastname = models.CharField(max_length=25)
     nickname = models.CharField(max_length=25, unique=True)
     email = models.EmailField(unique=True)
+    year = models.PositiveSmallIntegerField(validators=[year_validator])
     status = models.ForeignKey(Status)
 
     def _get_balance(self):

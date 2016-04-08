@@ -40,7 +40,7 @@ class PaymentInline(admin.TabularInline):
 
 
 class CustomerAdmin(admin.ModelAdmin):
-    fields = ['firstname', 'lastname', 'nickname', 'email', 'status', 'balance']
+    fields = ['firstname', 'lastname', 'nickname', 'email', 'year', 'status', 'balance']
     readonly_fields= ['balance',]
     inlines = [PaymentInline, PurchaseInline]
     search_fields = ['firstname', 'lastname', 'nickname']

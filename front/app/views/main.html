@@ -34,12 +34,12 @@
 			<md-autocomplete
 				md-items="customer in main.customers | fuzzy:main.customerSearchText:false:true"
 				md-search-text="main.customerSearchText"
-				md-item-text="customer.getFullname()"
+				md-item-text="customer.fullname"
 				md-selected-item-change="main.setCustomer(customer.pk)"
 				md-autoselect="true"
 				md-autofocus
 				placeholder="Customer name?">
-				<span>{{customer.getFullname()}}</span>
+				<span>{{customer.fullname}}</span>
 			</md-autocomplete>
 		</div>
 
@@ -89,8 +89,9 @@
 					layout="column"
 					layout-align="space-around center"
 					ng-show="main.customer">
-					<span>{{getCustomerFullname(main.customer)}}</span>
+					<span>{{main.customer.fullname}}</span>
 					<span>{{main.customer.status.name}} customer</span>
+					<span>{{main.customer.relativeYear}}Y</span>
 					<md-button
 						aria-label="Open payment window"
 						ng-click="main.paymentIsOpen = true"

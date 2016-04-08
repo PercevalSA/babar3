@@ -9,12 +9,18 @@
  */
 angular.module('BabarApp')
 .controller('MainCtrl', function ($scope, $mdDialog, $mdToast, API) {
+	var now = new Date();
+	var currentSchoolYear = (now.getMonth() + 1) > 6 ? now.getFullYear() + 1 : now.getFullYear();
+	var getRelativeYear = function(customer) {
+		return 3 + -1*(customer.year - currentSchoolYear);
+	};
+	var getFullName = function(customer) {
+		return customer.firstname + ' (' + customer.nickname + ') ' + customer.lastname;
+	};
 	API.getCustomer().then(function(res) {
 		$scope.main.customers = res.data
 		.map(function(customer) {
-			customer.getFullname = function() {
-				return this.firstname + ' (' + this.nickname + ') ' + this.lastname;
-			};
+			customer.fullname = getFullName(customer);
 			return customer;
 		});
 	});
@@ -25,6 +31,9 @@ angular.module('BabarApp')
 	this.setCustomer = function(pk) {
 		if(pk) {
 			API.getCustomer(pk).then(function(res) {
+				var customer = res.data;
+				customer.fullname = getFullName(customer);
+				customer.relativeYear = getRelativeYear(customer);
 				$scope.main.customer = res.data;
 			});
 		}

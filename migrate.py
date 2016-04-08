@@ -153,6 +153,25 @@ class Customer(Model):
         self.email = ''.join(random.choice(string.digits) for _ in range(10)) + '@example.org'
         self.status = status
 
+    def get_graduation_year(self):
+        id = int(self.id)
+        if id >= 1129:
+            return 2018
+        elif id >= 970:
+            return 2017
+        elif id >= 809:
+            return 2016
+        elif id >= 645:
+            return 2015
+        elif id >= 481:
+            return 2014
+        elif id >= 330:
+            return 2013
+        elif id >= 183:
+            return 2012
+        else:
+            return 2011
+
     def encode(self):
         data = super().encode()
         data['fields'] = {
@@ -160,7 +179,8 @@ class Customer(Model):
             'lastname': self.lastname,
             'nickname': self.nickname,
             'email': self.email,
-            'status': self.status
+            'status': self.status,
+            'year': self.get_graduation_year()
         }
         return data
 
