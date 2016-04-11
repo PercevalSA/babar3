@@ -36,7 +36,7 @@ if [ ! -d $TARGET_DIR ]; then
 
 	read -s -p "Enter MySQL root password: " sqlpasswd
 	echo
-	mysql -u root --password=$sqlpasswd -e "create database if not exists babar3; use babar_dev;"
+	mysql -u root --password=$sqlpasswd -e "create database if not exists babar3; use babar3;"
 
 	sed "s/BABAR3_SQL_PASSWORD/$sqlpasswd/" -i $SETTINGS
 	secret_key=$(openssl rand -base64 64 | tr -d "\n" | sed "s/....$//" | sed "s:/:|:g")
