@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from rest_framework import viewsets, mixins, filters
+from rest_framework.permissions import AllowAny
 from .models import *
 from .serializers import *
 
@@ -49,6 +50,8 @@ class PurchaseViewSet(mixins.CreateModelMixin,
                       mixins.RetrieveModelMixin,
                       mixins.ListModelMixin,
                       viewsets.GenericViewSet):
+    # Everybody can add a purchase
+    permission_classes = (AllowAny,)
     queryset = Purchase.objects.all()
     serializer_class = PurchaseSerializer
     filter_fields = ('customer', 'product',)
