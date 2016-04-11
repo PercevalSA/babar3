@@ -13,7 +13,7 @@
     "angular-material": "^1.0.5",
     "angular-unicorn-directive": "^0.0.2",
     "angular-marked": "^1.0.1",
-    "angular-filter": "git@github.com:dryvenn/angular-filter.git#no-karma"
+    "angular-filter": "https://github.com/dryvenn/angular-filter.git#master"
   },
   "devDependencies": {
     "angular-mocks": "^1.4.0"
