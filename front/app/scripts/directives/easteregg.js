@@ -11,5 +11,11 @@ angular.module('BabarApp')
 	return {
 		restrict: 'E',
 		templateUrl: 'views/easteregg.html',
+		controllerAs: 'easter',
+		controller: function() {
+			this.display = function(customer) {
+				return customer.nickname.match(/dryvenn|iansus|percy/i) !== null;
+			};
+		}
 	};
 });

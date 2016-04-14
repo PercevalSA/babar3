@@ -1,6 +1,3 @@
 <unicorn
-ng-show="
-['dryvenn', 'iansus', 'percy']
-.indexOf(main.customer.nickname.toLowerCase()) >= 0
-">
+ng-show="main.customer && easter.display(main.customer)">
 </unicorn>
