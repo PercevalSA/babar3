@@ -10,8 +10,14 @@ You cant get SSL certificates with [letsencrypt](https://github.com/letsencrypt/
 Both Django and Angular get a special dev server.
 They are available with:
 ```bash
-back/env/bin/python3 manage.py migrate
-cd font && grunt serve
+cd back
+source ./env/bin/activate
+python3 manage.py runserver
+```
+
+```bash
+cd front
+grunt serve
 ```
 
 
