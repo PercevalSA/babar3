@@ -46,7 +46,7 @@ class PaymentSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Payment
-        fields = ('pk', 'customer', 'amount')
+        fields = ('pk', 'customer', 'amount', 'timestamp')
         read_only_fields = ('timestamp')
 
 
@@ -56,7 +56,7 @@ class PurchaseSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Purchase
-        fields = ('pk', 'customer', 'product')
+        fields = ('pk', 'customer', 'product', 'timestamp')
         read_only_fields = ('timestamp')
 
     def validate(self, data):
