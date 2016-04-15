@@ -49,7 +49,7 @@ class StaticTemplateView(TemplateView):
 
 urlpatterns = [
     url(r'^api/auth/', include('knox.urls')),
+    url(r'^api/social/', include(social_router.urls)),
     url(r'^api/', include(server_router.urls)),
-    url(r'^social/', include(social_router.urls)),
     url(r'^admin/', admin.site.urls),
 ]

@@ -34,6 +34,12 @@ if [ ! -d $TARGET_DIR ]; then
 	sed "s|var SERVER.*|$serverjs|" -i $TARGET_DIR/front/app/scripts/services/API.js
 	sed "s|_DOMAIN|$domain|g" -i $TARGET_DIR/conf/nginx.conf
 
+	authheader="var AUTH_HEADER_NAME = 'X-User-Login';"
+	sed "s|var AUTH_HEADER_NAME.*|$authheader|" -i $TARGET_DIR/front/app/scripts/services/API.js
+
+	echo "Enter website Basic authentication password."
+	sudo htpasswd -c $TARGET_DIR/conf/htpasswd babar3
+
 	read -s -p "Enter MySQL root password: " sqlpasswd
 	echo
 	mysql -u root --password=$sqlpasswd -e "create database if not exists babar3; use babar3;"

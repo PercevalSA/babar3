@@ -129,11 +129,10 @@ angular.module('BabarApp')
 		var config = {
 			'url': SERVER + 'api/auth/login/',
 			'method': 'POST',
-			'headers': {
-				'Authorization':'Basic ' + btoa(username + ':' + password)
-			},
-			'data': {}
+			'data': {},
+			'headers': {}
 		};
+		config.headers[AUTH_HEADER_NAME] = 'Basic ' + btoa(username + ':' + password);
 		return call(config);
 	};
 
@@ -148,7 +147,7 @@ angular.module('BabarApp')
 	};
 
 	this.tweet = function(time, message) {
-		var path = 'social/tweet/';
+		var path = 'api/social/tweet/';
 		var data = {
 			'time': time,
 			'message': message
