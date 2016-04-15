@@ -1,24 +1,7 @@
 'use strict';
 
 var SERVER = 'http://localhost:8000/';
-
-/**
- * @ngdoc service
- * @name BabarApp.Token
- * @description
- * # Token
- * Service in the BabarApp.
- */
-angular.module('BabarApp')
-.service('Token', function () {
-	var token = '';
-	this.get = function() {
-		return token;
-	};
-	this.set = function(val) {
-		token = 'Token ' + val;
-	};
-});
+var AUTH_HEADER_NAME = 'Authorization';
 
 /**
  * @ngdoc service
@@ -28,18 +11,12 @@ angular.module('BabarApp')
  * Service in the BabarApp.
  */
 angular.module('BabarApp')
-.service('API', function ($http, $q, $location, Token, auth) {
+.service('API', function ($http, $q, $location, auth) {
 	// Store the last status for errors
 	var error = { code: '', text: ''};
 	this.getLatestError = function() { return error; };
 
 	var call = function(config) {
-		/* Non-login POST methods need authentication */
-		if(config.method === 'POST' && config.url.indexOf('login') < 0) {
-			config.headers = {
-				'Authorization': Token.get()
-			};
-		}
 		return $http(config)
 		/* Set the latest error and/or propagate */
 		.then(function(res) {
@@ -56,38 +33,22 @@ angular.module('BabarApp')
 		}, function(res) {
 			// not OK
 			switch(res.status) {
-				/* If was a login, it means it
-				 * failed, so transmit that.
-				 *
-				 * If it was something else,
-				 * authentication is needed,
-				 * use the auth module to do it.
-				 * If success, remake the call and
-				 * propagate the result (successful
-				 * or not).
-				 * If failure (ie cancellation),
-				 * just give up.
-				 */
-				case 401:
-				case 403:
-				if(config.url.indexOf('login') >= 0) {
-					return $q.reject(res);
-				}
-				else {
-					return auth.prompt(res.statusText)
-					.then(function() {
-						return call(config);
-					});
-				}
-				break;
 				/* Request is bad
-				 * Let's just propagate that to the view that made the call.
+				 * Propagate that to the view that made the call.
 				 */
 				case 400: return $q.reject(res);
+				/* Request is unauthorized or forbidden
+				 * Propagate that to the auth view,
+				 * which should have made the call.
+				 */
+				case 403: return $q.reject(res);
+				case 401: return $q.reject(res);
 				/* This should not happen
 				 * Go to the error view
 				 */
-				default: $location.url('error'); return $q.reject(res);
+				default:
+					$location.url('error');
+				return $q.reject(res);
 			}
 		});
 	};
@@ -102,7 +63,25 @@ angular.module('BabarApp')
 		var config = {
 			'url': SERVER + path,
 			'method': 'POST',
-			'data': data || {}
+			'data': data || {},
+			'headers': {}
+		};
+		// POST methods need login
+		return auth.getHeader().then(function(header) {
+			config.headers[AUTH_HEADER_NAME] = header;
+			// Tokens are valid only once.
+			auth.clearHeader();
+			return call(config);
+		}, function() {
+			return $q.reject();
+		});
+	};
+	var postWithoutLogin = function(path, data) {
+		var config = {
+			'url': SERVER + path,
+			'method': 'POST',
+			'data': data || {},
+			'headers': {}
 		};
 		return call(config);
 	};
@@ -141,13 +120,12 @@ angular.module('BabarApp')
 			'customer': customerPK,
 			'product': productPK,
 		};
-		return post(path, data);
+		// This one is always authorized.
+		return postWithoutLogin(path, data);
 	};
 
 	this.login = function(username, password) {
-		/* Login is special: whatever the current
-		 * Credential type, it always uses Basic.
-		 */
+		/* Login is special: it uses Basic auth. */
 		var config = {
 			'url': SERVER + 'api/auth/login/',
 			'method': 'POST',
@@ -156,13 +134,7 @@ angular.module('BabarApp')
 			},
 			'data': {}
 		};
-		return call(config)
-		.then(function(res) {
-			Token.set(res.data.token);
-			return $q.resolve(res);
-		}, function(res) {
-			return $q.reject(res);
-		});
+		return call(config);
 	};
 
 	this.logout = function() {

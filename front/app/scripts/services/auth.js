@@ -4,7 +4,7 @@
  * @ngdoc service
  * @name BabarApp.auth
  * @description
- * # auth
+ * # Auth
  * Service in the BabarApp.
  */
 angular.module('BabarApp')
@@ -25,9 +25,9 @@ angular.module('BabarApp')
 		 * of this one (can't have two dialogs at the same time).
 		 */
 		API.login(this.username, this.password)
-		.then(function()  {
+		.then(function(res)  {
 			// Auth successful, exit
-			$mdDialog.hide();
+			$mdDialog.hide(res.data.token);
 		}, function(res) {
 			// Auth unsuccessful, tell the user
 			var wrongStatuses = [400, 401, 403];
@@ -41,7 +41,28 @@ angular.module('BabarApp')
 	};
 })
 .service('auth', function ($q, $mdDialog, $mdToast) {
-	this.prompt = function(why) {
+	var header = '';
+	var setHeader = function(val) {
+		header = 'Token ' + val;
+	};
+	this.clearHeader = function() {
+		header = '';
+	};
+	this.getHeader = function() {
+		if(header === '') {
+			return prompt('Please log in')
+			.then(function(token) {
+				setHeader(token);
+				return $q.resolve(header);
+			}, function() {
+				return $q.reject();
+			});
+		}
+		else {
+			return $q.resolve(header);
+		}
+	};
+	var prompt = function(why) {
 		return $mdDialog.show({
 			templateUrl: 'views/auth-dialog.html',
 			openFrom: '#left',
@@ -51,10 +72,9 @@ angular.module('BabarApp')
 			controller: 'AuthCtrl',
 			controllerAs: 'auth',
 			locals: {why: why},
-		}).then(function() {
+		}).then(function(token) {
 			// OK
-			// Don't say nothing, OP will talk
-			return $q.resolve();
+			return $q.resolve(token);
 		}, function() {
 			// Cancelled
 			$mdToast.showSimple('Cancelled');
