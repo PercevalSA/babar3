@@ -1,28 +1,26 @@
 <md-toolbar>
 	<div class="md-toolbar-tools">
 		<h1>
-			<strong>Babar</strong>
+			<a href="https://youtu.be/xat1GVnl8-k"><strong>Babar</strong></a>
 		</h1>
 		<span flex></span>
 		<github-md-renderer
 			stub='Babaritech/doc'
+			label='Prices'
 			branch='master'
 			path='outsiders-prices.md'
 			icon='euro_symbol'>
 		</github-md-renderer>
 		<github-md-renderer
 			stub='Babaritech/doc'
+			label='Clean-up'
 			branch='master'
 			path='how-to-clean.md'
 			icon='format_color_fill'>
 		</github-md-renderer>
 		<tweet hide show-gt-xs></tweet>
-		<md-button hide show-gt-xs href="stats/" class="md-icon-button" aria-label="Statistics">
-			<md-icon md-font-set="material-icons">insert_chart</md-icon>
-		</md-button>
-		<md-button hide show-gt-xs href="admin/" class="md-icon-button" aria-label="Admin">
-			<md-icon md-font-set="material-icons">settings</md-icon>
-		</md-button>
+		<link-button url="stats/" label="Stats" icon="insert_chart"></link-button>
+		<link-button url="admin/" label="Admin" icon="settings"></link-button>
 	</div>
 </md-toolbar>
 
@@ -98,7 +96,7 @@
 					<md-button
 						aria-label="Open payment window"
 						ng-click="main.paymentIsOpen = true"
-						class="md-warn md-raised">
+						class="md-accent md-raised">
 						<span><strong>{{main.customer.balance}} €</strong></span>
 					</md-button>
 				</div>

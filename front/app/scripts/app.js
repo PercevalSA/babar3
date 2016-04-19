@@ -43,8 +43,9 @@ angular
 	// .accentPalette('pink')
 	// .warnPalette('red')
 	// .backgroundPalette('grey');
+	// See https://www.google.com/design/spec/style/color.html#color-color-palette
 	.primaryPalette('teal')
-	.accentPalette('light-blue')
-	.warnPalette('pink')
+	.accentPalette('deep-orange')
+	.warnPalette('red')
 	.backgroundPalette('grey');
 });

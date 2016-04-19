@@ -50,7 +50,8 @@ angular.module('BabarApp')
 			stub: '@',
 			branch: '@',
 			path: '@',
-			icon: '@'
+			icon: '@',
+			label: '@'
 		}
 	};
 });
