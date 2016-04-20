@@ -1,0 +1,23 @@
+# Cron job to make backups of babar3
+# Intended to be placed alonside $PASS
+
+DIR=/var/www/babar3
+PASS=/root/cron/passphrase
+BAK=/root/backups
+
+mkdir -p $BAK
+chmod 755 $BAK
+
+target=$BAK/$(date -I).json
+
+pushd $DIR/back > /dev/null
+./env/bin/python3 manage.py dumpdata babar_server --indent 4 > $target
+popd > /dev/null
+
+rm -f ${target}.gpg
+
+gpg --batch --sign --encrypt --passphrase-file $PASS --default-recipient-self --output ${target}.gpg $target
+
+rm -f $target
+
+chmod 644 ${target}.gpg
