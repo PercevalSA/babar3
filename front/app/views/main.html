@@ -28,6 +28,7 @@
 	<form
 		ng-submit="main.makePurchase()"
 		layout="column"
+		layout-padding
 		layout-align="space-around"
 		flex>
 
@@ -72,11 +73,10 @@
 
 		<div
 			flex
-			layout-padding
 			layout="row"
+			layout-padding
 			layout-align="space-around center"
-			id="toast-container"
-			md-whiteframe="2">
+			id="toast-container">
 			<md-content
 				flex
 				layout-align="space-around center"
@@ -84,7 +84,7 @@
 				<!-- This should be replaced by the user's pic when selected -->
 				<img
 				hide show-gt-xs
-				src="../images/babar.jpg"
+				src="../images/babar.png"
 				style="height:100px;"/>
 				<div
 					layout="column"
@@ -116,8 +116,7 @@
 		<div
 			flex
 			layout-padding
-			layout="column"
-			md-whiteframe="2">
+			layout="column">
 
 			<md-content
 				flex
