@@ -52,4 +52,5 @@ urlpatterns = [
     url(r'^api/social/', include(social_router.urls)),
     url(r'^api/', include(server_router.urls)),
     url(r'^admin/', admin.site.urls),
+    url(r'^docs/', include('rest_framework_swagger.urls')),
 ]

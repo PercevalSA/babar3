@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_swagger',
     'knox',
     'corsheaders',
     'crispy_forms',
@@ -161,4 +162,17 @@ REST_KNOX = {
     'MAX_TOKEN_TTL': datetime.timedelta(hours=1),
     'DEFAULT_TOKEN_USE': 1,
     'MAX_TOKEN_USE': 1
+}
+
+# Swagger
+SWAGGER_SETTINGS = {
+    'api_version': '1.0',
+    'enabled_methods': [
+        'get',
+        'post',
+        'delete'
+    ],
+    'info': {
+        'title': 'babar3',
+    },
 }

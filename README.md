@@ -6,6 +6,7 @@ On Debian-like system, try:
 Don't forget to read the [Django checklist](https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/).
 You cant get SSL certificates with [letsencrypt](https://github.com/letsencrypt/letsencrypt).
 
+
 ## Development
 Both Django and Angular get a special dev server.
 They are available with:
@@ -28,7 +29,11 @@ To migrate the old babar database to the new one:
 - Import it in Django `python3 manage.py loaddata new.json`
 
 
-# Relevant documentation
+# API documentation
+Available at `/docs/`.
+
+
+# Relevant ressources
 ## Back
 - [Django](https://www.djangoproject.com/)
 - [Django REST framework](http://www.django-rest-framework.org/)

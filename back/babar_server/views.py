@@ -18,6 +18,17 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class CustomerViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    Below is doc for Swagger:
+    ---
+    list:
+        parameters:
+            - name: info
+              required: false
+              description: How much info is returned on customers
+              paramType: query
+              enum: [basic, full]
+    """
     queryset = Customer.objects.all()
     serializer_class = CustomerSerializer
     filter_backends = (filters.SearchFilter,)
@@ -31,10 +42,14 @@ class CustomerViewSet(viewsets.ReadOnlyModelViewSet):
         specified in the URL. The full info on one customer can
         then be retrieved with its detailed view.
         """
-        info = self.request.query_params.get("info", "full")
-        if info == "basic":
-            return BasicCustomerSerializer
-        return self.serializer_class
+        try:
+            info = self.request.query_params.get("info", "full")
+            if info == "basic":
+                return BasicCustomerSerializer
+            else:
+                return CustomerSerializer
+        except AttributeError:
+            return self.serializer_class
 
 
 class PaymentViewSet(mixins.CreateModelMixin,
