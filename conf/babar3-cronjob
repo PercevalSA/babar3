@@ -18,7 +18,7 @@ popd > /dev/null
 
 rm -f ${target}.gpg
 
-gpg --batch --sign --encrypt --passphrase-file $PASS --default-recipient-self --output ${target}.gpg $target
+gpg --batch --symmetric --passphrase-file $PASS --output ${target}.gpg $target
 
 rm -f $target
 
