@@ -56,6 +56,13 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# to migrate without errors
+SILENCED_SYSTEM_CHECKS = [
+    'admin.E408',
+    'admin.E409',
+    'admin.E410',
+]
+
 ROOT_URLCONF = 'babar3.urls'
 
 TEMPLATES = [
@@ -113,15 +120,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'Europe/Paris'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
@@ -144,7 +146,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
     ),
     'DEFAULT_FILTER_BACKENDS': (
-        'rest_framework.filters.DjangoFilterBackend',
+        'django_filters.rest_framework.DjangoFilterBackend',
     ),
 }
 
@@ -153,7 +155,7 @@ SESSION_COOKIE_AGE = 300 # 5 minutes
 
 # CORS permissions for local development
 CORS_ORIGIN_WHITELIST = (
-    'localhost:9000',
+    'http://localhost:9000',
 )
 
 # Knox auth

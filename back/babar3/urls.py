@@ -17,6 +17,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from django.views.generic import TemplateView
 from rest_framework.routers import DefaultRouter
+from rest_framework_swagger.views import get_swagger_view
 from babar_server.views import *
 from babar_twitter.views import *
 
@@ -52,5 +53,5 @@ urlpatterns = [
     url(r'^api/social/', include(social_router.urls)),
     url(r'^api/', include(server_router.urls)),
     url(r'^admin/', admin.site.urls),
-    url(r'^docs/', include('rest_framework_swagger.urls')),
+    # url(r'^docs/', include(get_swagger_view(title='Pastebin API'))),
 ]

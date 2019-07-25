@@ -52,7 +52,12 @@ class Customer(models.Model):
     nickname = models.CharField(max_length=25, unique=True)
     email = models.EmailField(unique=True)
     year = models.PositiveSmallIntegerField(validators=[year_validator])
-    status = models.ForeignKey(Status)
+    status = models.ForeignKey(Status, on_delete=models.PROTECT)
+    """
+    TODO : set to models.SET_DEFAULT
+    Set the ForeignKey to its default value;
+    a default for the ForeignKey must be set.
+    """
 
     def _get_balance(self):
         """
@@ -82,7 +87,7 @@ class Transaction(models.Model):
     A transaction between the bar and a customer
     This implementation doesn't allow negative values.
     """
-    customer = models.ForeignKey(Customer)
+    customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
     timestamp = models.DateTimeField(auto_now_add=True)
     amount = models.DecimalField(max_digits=6, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))])
 
@@ -103,7 +108,7 @@ class Purchase(Transaction):
     """
     A purchase a customer has made of a product
     """
-    product = models.ForeignKey(Product)
+    product = models.ForeignKey(Product, on_delete=models.PROTECT)
 
     def save(self, *args, **kwargs):
         """

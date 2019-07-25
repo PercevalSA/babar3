@@ -8,9 +8,9 @@ TARGET_DIR=$TARGET_DIR_PREFIX/$TARGET_DIR_SUFFIX
 SETTINGS=$TARGET_DIR/back/babar3/settings.py
 
 
-sudo apt-get install -y mysql-client mysql-server libmysqlclient-dev nginx nodejs python3-pip git virtualenv npm
+sudo apt-get install -y mariadb-client mariadb-server libmariadbclient-dev nginx apache2-utils nodejs python3-pip git virtualenv npm
 [ ! -e /usr/bin/node ] && sudo ln -s /usr/bin/nodejs /usr/bin/node
-
+ln -s /usr/bin/mariadb_config /usr/bin/mysql_config
 
 set +e
 sudo nginx -s stop
@@ -40,9 +40,17 @@ if [ ! -d $TARGET_DIR ]; then
 	echo "Enter website Basic authentication password."
 	sudo htpasswd -c $TARGET_DIR/conf/htpasswd babar3
 
-	read -s -p "Enter MySQL root password: " sqlpasswd
+    # On first installation on Debian you should set root password
+    # sudo mysql -u root
+    # use mysql;
+    # update user set plugin='' where User='root';
+    # UPDATE user SET password=PASSWORD('YourPasswordHere') WHERE User='root' AND Host = 'localhost';
+    # flush privileges;
+    # exit;
+
+    read -s -p "Enter MySQL root password: " sqlpasswd
 	echo
-	mysql -u root --password=$sqlpasswd -e "create database if not exists babar3; use babar3;"
+    sudo mysql -u root --password=$sqlpasswd -e "create database if not exists babar3; use babar3;"
 
 	sed "s/BABAR3_SQL_PASSWORD/$sqlpasswd/" -i $SETTINGS
 	secret_key=$(openssl rand -base64 64 | tr -d "\n" | sed "s/....$//" | sed "s:/:|:g")
@@ -77,8 +85,6 @@ else
 fi
 
 
-
-
 cd $TARGET_DIR/front
 sudo npm install -g npm
 sudo npm install -g grunt-cli bower yo generator-karma generator-angular
@@ -97,7 +103,6 @@ python3 manage.py check --deploy
 
 
 cd $TARGET_DIR/conf
-
 target=/etc/nginx/nginx.conf
 sudo cp nginx.conf $target
 sudo sed "s:_TARGET_DIR:$TARGET_DIR:g" -i $target
